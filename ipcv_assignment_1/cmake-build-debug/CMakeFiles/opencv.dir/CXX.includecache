@@ -6,7 +6,19 @@
 
 #IncludeRegexTransform: 
 
-/Users/george/CLionProjects/ipcv_assignment_1/load_faces.cpp
+/Users/george/CLionProjects/ipcv_assignment_1/header/load_darts.h
+stdio.h
+-
+opencv2/opencv.hpp
+-
+
+/Users/george/CLionProjects/ipcv_assignment_1/header/load_faces.h
+stdio.h
+-
+opencv2/opencv.hpp
+-
+
+/Users/george/CLionProjects/ipcv_assignment_1/main.cpp
 iostream
 -
 stdio.h
@@ -21,18 +33,10 @@ opencv2/imgproc.hpp
 -
 opencv2/objdetect/objdetect.hpp
 -
-vector
--
-fstream
--
-load_faces.h
-/Users/george/CLionProjects/ipcv_assignment_1/load_faces.h
-
-/Users/george/CLionProjects/ipcv_assignment_1/load_faces.h
-stdio.h
--
-opencv2/opencv.hpp
--
+header/load_faces.h
+/Users/george/CLionProjects/ipcv_assignment_1/header/load_faces.h
+header/load_darts.h
+/Users/george/CLionProjects/ipcv_assignment_1/header/load_darts.h
 
 /usr/local/include/opencv/cxcore.h
 opencv2/core/core_c.h

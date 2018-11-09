@@ -82,16 +82,16 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/george/CLionProjects/ipcv_assignment_1/header/load_darts.h">
+			<Option target="opencv"/>
+		</Unit>
+		<Unit filename="/Users/george/CLionProjects/ipcv_assignment_1/header/load_faces.h">
+			<Option target="opencv"/>
+		</Unit>
 		<Unit filename="/Users/george/CLionProjects/ipcv_assignment_1/load_darts.cpp">
 			<Option target="opencv"/>
 		</Unit>
-		<Unit filename="/Users/george/CLionProjects/ipcv_assignment_1/load_darts.h">
-			<Option target="opencv"/>
-		</Unit>
 		<Unit filename="/Users/george/CLionProjects/ipcv_assignment_1/load_faces.cpp">
-			<Option target="opencv"/>
-		</Unit>
-		<Unit filename="/Users/george/CLionProjects/ipcv_assignment_1/load_faces.h">
 			<Option target="opencv"/>
 		</Unit>
 		<Unit filename="/Users/george/CLionProjects/ipcv_assignment_1/main.cpp">

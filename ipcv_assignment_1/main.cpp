@@ -14,10 +14,13 @@ using namespace cv;
 
 /** Function Headers */
 void detectAndDisplay( Mat frame );
-void task_one();
+void task_one_a();
 void task_two();
+void task_one_b();
 Mat* load_images();
 void label_faces();
+vector<Rect> detect(Mat image, CascadeClassifier model);
+int calculate_tpr(vector<Rect> ground_truth, vector<Rect> detections);
 
 /** Global variables */
 String cascade_name = "../frontalface.xml";
@@ -28,15 +31,17 @@ CascadeClassifier cascade;
 /** @function main */
 int main( int argc, const char** argv )
 {
-
-    label_faces();
+    //label_faces();
     //label_darts();
-    //task_one();
+    //task_one_a();
     //task_two();
+    task_one_b();
+
+
+
+
     return 0;
 }
-
-
 
 void task_two(){
     // 1. Load the Strong Classifier in a structure called `Cascade'
@@ -61,21 +66,8 @@ void task_two(){
     }
 }
 
-void task_one()
+void task_one_a()
 {
-    // first number is the image
-    vector<vector<Rect>> imageRects;
-    imageRects.at(0).at(0).x = 1;
-    imageRects.at(0).at(0).y = 1;
-
-
-
-    // need to fill rects up with x, y, w ,h
-    vector<Rect> rects;
-
-    //cout << get<0>(a) << endl;
-
-
 
     // Task 1.
     // Create array of images.
@@ -99,6 +91,89 @@ void task_one()
         imwrite(output, frames[i]);
     }
 }
+
+/** Task 1b, calculate the TPR for images 5 and 15 when detecting for faces */
+void task_one_b() {
+    Mat darts5 = imread("../img/dart5.jpg");
+    Mat darts15 = imread("../img/dart15.jpg");
+    vector<Rect> darts5_truth = load_faces_5();
+    vector<Rect> darts15_truth = load_faces_15();
+
+    if (!cascade.load(cascade_name)) {
+        printf("--(!)Error loading\n");
+        return;
+    };
+    vector<Rect> darts_5_detection = detect(darts5, cascade);
+
+    for( int i = 0; i < darts_5_detection.size(); i++ )
+    {
+        rectangle(darts5, Point(darts_5_detection[i].x, darts_5_detection[i].y), Point(darts_5_detection[i].x + darts_5_detection[i].width, darts_5_detection[i].y + darts_5_detection[i].height), Scalar( 0, 255, 0 ), 2);
+    }
+
+    //imshow("abc", darts5);
+    //waitKey(0);
+
+
+    int darts5tpr = calculate_tpr(darts5_truth, darts_5_detection);
+
+    vector<Rect> darts_15_detection = detect(darts15, cascade);
+    //int darts15tpr = calculate_tpr(darts15_truth,darts_15_detection);
+
+
+    //cout << darts5tpr << endl;
+    //cout << darts15tpr << endl;
+
+
+
+}
+
+int calculate_tpr(vector<Rect> ground_truth, vector<Rect> detections){
+    int tp = 0;
+    vector<Rect> correct_detections;
+    for(int j = 0; j < ground_truth.size(); j++ ){
+        for(int i = 0; i < detections.size(); i++ ){
+            if (((detections.at(i).area() & ground_truth.at(j).area()) < 0)){
+                continue; }
+            else {
+
+                // Calculate the overlapping area
+                int width = min(ground_truth.at(j).x+ground_truth.at(j).width,detections.at(i).x+detections.at(i).width) - max(ground_truth.at(j).x, detections.at(i).x);
+                int height = min(ground_truth.at(j).y+ground_truth.at(j).height,detections.at(i).y+detections.at(i).height) - max(ground_truth.at(j).y,detections.at(i).y);;
+                double overlap = width*height;
+                double perc = (overlap/ground_truth.at(j).area()) * 100;
+
+                if (perc >= 0){
+                    if (detections[i].area() <= 2*ground_truth[j].area() ){
+                        correct_detections.emplace_back(detections[i]);
+                        tp++;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    Mat darts5 = imread("../img/dart5.jpg");
+    for( int i = 0; i < correct_detections.size(); i++ ) {
+        rectangle(darts5, Point(correct_detections[i].x, correct_detections[i].y), Point(correct_detections[i].x + correct_detections[i].width, correct_detections[i].y + correct_detections[i].height), Scalar( 0, 255, 0 ), 2);
+    }
+
+    imshow("Correct detections", darts5);
+    waitKey(0);
+
+    cout << "detections: " << correct_detections.size() << endl;
+    return tp;
+}
+
+
+vector<Rect> detect(Mat image, CascadeClassifier model){
+    Mat gray_image;
+    vector<Rect> result;
+    cvtColor(image, gray_image, CV_BGR2GRAY);
+    model.detectMultiScale( gray_image, result, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(50, 50), Size(500,500) );
+    return result;
+}
+
+
 
 
 
