@@ -97,7 +97,7 @@ vector<Rect> load_faces_4(){
 }
 vector<Rect> load_faces_5(){
     vector<Rect> res;
-    res.emplace_back(Rect(57,261,56,57));
+    res.emplace_back(Rect(40,261,70,70));
     res.emplace_back(Rect(72,146,41,61));
     res.emplace_back(Rect(197,227,51,56));
     res.emplace_back(Rect(296,254,50,58));

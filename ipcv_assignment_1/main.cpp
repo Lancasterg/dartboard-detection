@@ -13,14 +13,23 @@ using namespace std;
 using namespace cv;
 
 /** Function Headers */
-void detectAndDisplay( Mat frame );
+void detectAndDisplay(Mat frame);
+
 void task_one_a();
+
 void task_two();
+
 void task_one_b();
-Mat* load_images();
+
+Mat *load_images();
+
 void label_faces();
+
+double calculate_f1(int true_positives, int total_detections, int true_detections);
+
 vector<Rect> detect(Mat image, CascadeClassifier model);
-int calculate_tpr(vector<Rect> ground_truth, vector<Rect> detections);
+
+int calculate_tpr(vector<Rect> ground_truth, vector<Rect> detections, Mat image);
 
 /** Global variables */
 String cascade_name = "../frontalface.xml";
@@ -29,34 +38,32 @@ CascadeClassifier cascade;
 
 
 /** @function main */
-int main( int argc, const char** argv )
-{
+int main(int argc, const char **argv) {
     //label_faces();
     //label_darts();
     //task_one_a();
     //task_two();
     task_one_b();
-
-
-
-
     return 0;
 }
 
-void task_two(){
+void task_two() {
     // 1. Load the Strong Classifier in a structure called `Cascade'
-    if( !cascade.load( cascade_dart_name ) ){ printf("--(!)Error loading\n"); return; };
+    if (!cascade.load(cascade_dart_name)) {
+        printf("--(!)Error loading\n");
+        return;
+    };
 
     // 2. Load in the images from file
     Mat frames[16];
     char input_str[18];
-    for (int i = 0; i < 15; i++){
-        sprintf(input_str,"../img/dart%d.jpg", i);
+    for (int i = 0; i < 15; i++) {
+        sprintf(input_str, "../img/dart%d.jpg", i);
         frames[i] = imread(input_str);
     }
 
 
-    for(int i = 0; i < 15; i++) {
+    for (int i = 0; i < 15; i++) {
         char output[50];
         sprintf(output, "../task_2_detected/detected%d.jpg", i);
         // 3. Detect Faces and Display Result
@@ -66,8 +73,7 @@ void task_two(){
     }
 }
 
-void task_one_a()
-{
+void task_one_a() {
 
     // Task 1.
     // Create array of images.
@@ -79,10 +85,13 @@ void task_one_a()
     frames[4] = imread("../img/dart15.jpg");
 
     // 2. Load the Strong Classifier in a structure called `Cascade'
-    if( !cascade.load( cascade_name ) ){ printf("--(!)Error loading\n"); return; };
+    if (!cascade.load(cascade_name)) {
+        printf("--(!)Error loading\n");
+        return;
+    };
 
 
-    for(int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++) {
         char output[50];
         sprintf(output, "../detected%d.jpg", i);
         // 3. Detect Faces and Display Result
@@ -94,111 +103,116 @@ void task_one_a()
 
 /** Task 1b, calculate the TPR for images 5 and 15 when detecting for faces */
 void task_one_b() {
+    // read in images
     Mat darts5 = imread("../img/dart5.jpg");
     Mat darts15 = imread("../img/dart15.jpg");
     vector<Rect> darts5_truth = load_faces_5();
-    vector<Rect> darts15_truth = load_faces_15();
 
+    // load classifier
     if (!cascade.load(cascade_name)) {
         printf("--(!)Error loading\n");
         return;
     };
+
+    // detect faces using the cascade classifier
     vector<Rect> darts_5_detection = detect(darts5, cascade);
 
-    for( int i = 0; i < darts_5_detection.size(); i++ )
-    {
-        rectangle(darts5, Point(darts_5_detection[i].x, darts_5_detection[i].y), Point(darts_5_detection[i].x + darts_5_detection[i].width, darts_5_detection[i].y + darts_5_detection[i].height), Scalar( 0, 255, 0 ), 2);
-    }
-
-    //imshow("abc", darts5);
-    //waitKey(0);
-
-
-    int darts5tpr = calculate_tpr(darts5_truth, darts_5_detection);
-
-    vector<Rect> darts_15_detection = detect(darts15, cascade);
-    //int darts15tpr = calculate_tpr(darts15_truth,darts_15_detection);
-
-
-    //cout << darts5tpr << endl;
-    //cout << darts15tpr << endl;
-
-
-
+    // calulate tpr and f1 scores
+    int darts5tpr = calculate_tpr(darts5_truth, darts_5_detection, darts5);
+    double f1 = calculate_f1(darts5tpr, (int) darts_5_detection.size(), (int) darts5_truth.size());
+    cout << "f1 score: " << f1 << endl;
 }
 
-int calculate_tpr(vector<Rect> ground_truth, vector<Rect> detections){
-    int tp = 0;
+/** find if two rects overlap **/
+int overlap(Rect a, Rect b) {
+    if ((a.x + a.width) <= b.x || a.x >= (b.x + b.width) || a.y >= (b.y + b.height) || (a.y + a.height) <= b.y) {
+        return 0;
+    }
+    return 1;
+}
+
+
+/** calculate the true positive rate **/
+int calculate_tpr(vector<Rect> ground_truth, vector<Rect> detections, Mat image) {
+
     vector<Rect> correct_detections;
-    for(int j = 0; j < ground_truth.size(); j++ ){
-        for(int i = 0; i < detections.size(); i++ ){
-            if (((detections.at(i).area() & ground_truth.at(j).area()) < 0)){
-                continue; }
-            else {
+
+    for (Rect rect_a : ground_truth) {
+        for (Rect rect_b: detections) {
+
+            // if no overlap, continue to next iteration
+            if (!overlap(rect_a, rect_b)) {
+                continue;
+            } else {
 
                 // Calculate the overlapping area
-                int width = min(ground_truth.at(j).x+ground_truth.at(j).width,detections.at(i).x+detections.at(i).width) - max(ground_truth.at(j).x, detections.at(i).x);
-                int height = min(ground_truth.at(j).y+ground_truth.at(j).height,detections.at(i).y+detections.at(i).height) - max(ground_truth.at(j).y,detections.at(i).y);;
-                double overlap = width*height;
-                double perc = (overlap/ground_truth.at(j).area()) * 100;
+                int width = min(rect_a.x + rect_a.width, rect_b.x + rect_b.width) - max(rect_a.x, rect_b.x);
+                int height = min(rect_a.y + rect_a.height, rect_b.y + rect_b.height) - max(rect_a.y, rect_b.y);;
+                double overlap = width * height;
+                double overlap_percent = (overlap / rect_a.area()) * 100;
 
-                if (perc >= 0){
-                    if (detections[i].area() <= 2*ground_truth[j].area() ){
-                        correct_detections.emplace_back(detections[i]);
-                        tp++;
-                        break;
-                    }
+                // if overlap is greater than 75%, add to correct detections
+                if (overlap_percent >= 60 && rect_b.area() <= 2 * rect_a.area()) {
+                    correct_detections.emplace_back(rect_b);
+                    break;
                 }
             }
         }
     }
-    Mat darts5 = imread("../img/dart5.jpg");
-    for( int i = 0; i < correct_detections.size(); i++ ) {
-        rectangle(darts5, Point(correct_detections[i].x, correct_detections[i].y), Point(correct_detections[i].x + correct_detections[i].width, correct_detections[i].y + correct_detections[i].height), Scalar( 0, 255, 0 ), 2);
+
+
+    cout << "True detected rects\nx\ty" << endl;
+    for (Rect r : correct_detections) {
+        cout << r.x << "\t" << r.y << endl;
+        rectangle(image, Point(r.x, r.y), Point(r.x + r.width, r.y + r.height), Scalar(0, 255, 0), 2);
+
     }
 
-    imshow("Correct detections", darts5);
+    imshow("Correct detections", image);
     waitKey(0);
+    cout << "number of true positive detections: " << correct_detections.size() << endl;
+    return (int) correct_detections.size();
+}
 
-    cout << "detections: " << correct_detections.size() << endl;
-    return tp;
+/** Calculate the f1 score
+ * https://machinelearningmastery.com/classification-accuracy-is-not-enough-more-performance-measures-you-can-use **/
+double calculate_f1(int true_positives, int total_detections, int true_detections) {
+    double false_positives = total_detections - true_positives;
+    double precision = true_positives / (true_positives + false_positives);
+    double false_negatives = true_detections - true_positives;
+    double recall = true_positives / (true_positives + false_negatives);
+    return 2 * ((precision * recall) / (precision + recall));
 }
 
 
-vector<Rect> detect(Mat image, CascadeClassifier model){
+vector<Rect> detect(Mat image, CascadeClassifier model) {
     Mat gray_image;
     vector<Rect> result;
     cvtColor(image, gray_image, CV_BGR2GRAY);
-    model.detectMultiScale( gray_image, result, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(50, 50), Size(500,500) );
+    model.detectMultiScale(gray_image, result, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(50, 50), Size(500, 500));
     return result;
 }
 
 
-
-
-
-
-
 /** @function detectAndDisplay */
-void detectAndDisplay( Mat frame )
-{
+void detectAndDisplay(Mat frame) {
     std::vector<Rect> faces;
     Mat frame_gray;
 
     // 1. Prepare Image by turning it into Grayscale and normalising lighting
-    cvtColor( frame, frame_gray, CV_BGR2GRAY );
-    equalizeHist( frame_gray, frame_gray );
+    cvtColor(frame, frame_gray, CV_BGR2GRAY);
+    equalizeHist(frame_gray, frame_gray);
 
     // 2. Perform Viola-Jones Object Detection
-    cascade.detectMultiScale( frame_gray, faces, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(50, 50), Size(500,500) );
+    cascade.detectMultiScale(frame_gray, faces, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(50, 50), Size(500, 500));
 
     // 3. Print number of Faces found
     std::cout << faces.size() << std::endl;
 
     // 4. Draw box around faces found
-    for( int i = 0; i < faces.size(); i++ )
-    {
-        rectangle(frame, Point(faces[i].x, faces[i].y), Point(faces[i].x + faces[i].width, faces[i].y + faces[i].height), Scalar( 0, 255, 0 ), 2);
+    for (int i = 0; i < faces.size(); i++) {
+        rectangle(frame, Point(faces[i].x, faces[i].y),
+                  Point(faces[i].x + faces[i].width, faces[i].y + faces[i].height), Scalar(0, 255, 0), 2);
     }
 
 }
