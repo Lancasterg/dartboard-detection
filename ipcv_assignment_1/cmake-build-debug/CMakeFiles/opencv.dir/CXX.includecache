@@ -6,37 +6,15 @@
 
 #IncludeRegexTransform: 
 
-/Users/george/CLionProjects/ipcv_assignment_1/header/load_darts.h
-stdio.h
--
-opencv2/opencv.hpp
--
+/Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/calculations.cpp
+header/calculations.h
+/Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/header/calculations.h
 
-/Users/george/CLionProjects/ipcv_assignment_1/header/load_faces.h
+/Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/header/calculations.h
 stdio.h
 -
 opencv2/opencv.hpp
 -
-
-/Users/george/CLionProjects/ipcv_assignment_1/main.cpp
-iostream
--
-stdio.h
--
-opencv2/opencv.hpp
--
-opencv2/core/core.hpp
--
-opencv2/highgui/highgui.hpp
--
-opencv2/imgproc.hpp
--
-opencv2/objdetect/objdetect.hpp
--
-header/load_faces.h
-/Users/george/CLionProjects/ipcv_assignment_1/header/load_faces.h
-header/load_darts.h
-/Users/george/CLionProjects/ipcv_assignment_1/header/load_darts.h
 
 /usr/local/include/opencv/cxcore.h
 opencv2/core/core_c.h
@@ -113,10 +91,6 @@ opencv2/core/check.hpp
 /usr/local/include/opencv2/core/check.hpp
 opencv2/core/base.hpp
 -
-
-/usr/local/include/opencv2/core/core.hpp
-opencv2/core.hpp
-/usr/local/include/opencv2/core/opencv2/core.hpp
 
 /usr/local/include/opencv2/core/core_c.h
 opencv2/core/types_c.h
@@ -870,10 +844,6 @@ opencv2/videoio.hpp
 opencv2/highgui/highgui_c.h
 /usr/local/include/opencv2/opencv2/highgui/highgui_c.h
 
-/usr/local/include/opencv2/highgui/highgui.hpp
-opencv2/highgui.hpp
-/usr/local/include/opencv2/highgui/opencv2/highgui.hpp
-
 /usr/local/include/opencv2/highgui/highgui_c.h
 opencv2/core/core_c.h
 /usr/local/include/opencv2/highgui/opencv2/core/core_c.h
@@ -933,10 +903,6 @@ opencv2/core.hpp
 -
 vector
 -
-
-/usr/local/include/opencv2/objdetect/objdetect.hpp
-opencv2/objdetect.hpp
-/usr/local/include/opencv2/objdetect/opencv2/objdetect.hpp
 
 /usr/local/include/opencv2/objdetect/objdetect_c.h
 opencv2/core/core_c.h

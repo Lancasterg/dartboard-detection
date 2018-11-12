@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/opencv.dir/main.cpp.o"
   "CMakeFiles/opencv.dir/load_faces.cpp.o"
   "CMakeFiles/opencv.dir/load_darts.cpp.o"
+  "CMakeFiles/opencv.dir/calculations.cpp.o"
   "opencv.pdb"
   "opencv"
 )

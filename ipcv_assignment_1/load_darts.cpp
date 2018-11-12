@@ -18,7 +18,9 @@ using namespace cv;
 
 
 
-/** Label all faces and save them to ../labelled_dartboards **/
+/**
+ * Label all faces and save them to ../labelled_dartboards
+ **/
 void label_darts(){
     vector<vector<Rect>> darts_labels = load_dart_labels();
     vector<Mat> images = load_test_images();
@@ -35,7 +37,10 @@ void label_darts(){
     }
 }
 
-
+/**
+ * Load all ground_truth dartboard labels
+ * @return vector containing all ground truth dartboard labels
+ */
 vector<vector<Rect>> load_dart_labels(){
     vector<vector<Rect>> result;
     result.emplace_back(load_darts_0());

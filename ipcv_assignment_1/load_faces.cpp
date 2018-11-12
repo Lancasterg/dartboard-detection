@@ -16,7 +16,9 @@ using namespace std;
 using namespace cv;
 
 
-/** Label all faces and save them to ../labelled_faces **/
+/**
+ * Label all faces and save them to ../labelled_faces
+ */
 void label_faces(){
     vector<vector<Rect>> faces_labels = load_face_labels();
     vector<Mat> images = load_test_images();
@@ -33,7 +35,10 @@ void label_faces(){
     }
 }
 
-
+/**
+ * Load all test data set images
+ * @return vector of all test data images
+ */
 vector<Mat> load_test_images(){
     vector<Mat> res;
     for(int i = 0; i < 16; i++) {
@@ -43,7 +48,10 @@ vector<Mat> load_test_images(){
     }
     return res;
 }
-
+/**
+ * Load all ground truth face labels
+ * @return vector containing all ground truth face labels
+ */
 vector<vector<Rect>> load_face_labels(){
     vector<vector<Rect>> result;
     result.emplace_back(load_faces_0());

@@ -1,35 +1,14 @@
 #include <iostream>
-#include <stdio.h>
 #include <opencv2/opencv.hpp>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/objdetect/objdetect.hpp>
+#include "header/main.h"
 #include "header/load_faces.h"
 #include "header/load_darts.h"
+#include "header/calculations.h"
 
-
+/** Namespace declaration **/
 using namespace std;
 using namespace cv;
 
-/** Function Headers */
-void detectAndDisplay(Mat frame);
-
-void task_one_a();
-
-void task_two();
-
-void task_one_b();
-
-Mat *load_images();
-
-void label_faces();
-
-double calculate_f1(int true_positives, int total_detections, int true_detections);
-
-vector<Rect> detect(Mat image, CascadeClassifier model);
-
-int calculate_tpr(vector<Rect> ground_truth, vector<Rect> detections, Mat image);
 
 /** Global variables */
 String cascade_name = "../frontalface.xml";
@@ -37,13 +16,34 @@ String cascade_dart_name = "../training_data/dartcascade/cascade.xml";
 CascadeClassifier cascade;
 
 
+
 /** @function main */
 int main(int argc, const char **argv) {
+    CascadeClassifier model;
+
+    if (!model.load(cascade_name)) {
+        printf("--(!)Error loading\n");
+        return 1;
+    };
+
+    vector<Mat> images = load_test_images();
+    vector<vector<Rect>> true_labels = load_face_labels();
+
+    double f1 = calculate_total_f1(images, true_labels, model);
+
+
+
+
+
+
     //label_faces();
     //label_darts();
     //task_one_a();
+    //task_one_b();
     //task_two();
-    task_one_b();
+    //task_one_b();
+    //task_two_b();
+
     return 0;
 }
 
@@ -91,6 +91,13 @@ void task_one_a() {
     };
 
 
+    //auto true_5 = load_faces_5();
+    //auto true_15 = load_faces_15();
+
+    //auto rects_5 = detect(frames[1], cascade);
+    //auto rects_15 = detect(frames[4], cascade);
+
+    /*
     for (int i = 0; i < 5; i++) {
         char output[50];
         sprintf(output, "../detected%d.jpg", i);
@@ -99,6 +106,12 @@ void task_one_a() {
         // 4. Save Result Image
         imwrite(output, frames[i]);
     }
+    */
+}
+
+
+void get_dataset_f1(){
+
 }
 
 /** Task 1b, calculate the TPR for images 5 and 15 when detecting for faces */
@@ -106,7 +119,9 @@ void task_one_b() {
     // read in images
     Mat darts5 = imread("../img/dart5.jpg");
     Mat darts15 = imread("../img/dart15.jpg");
+
     vector<Rect> darts5_truth = load_faces_5();
+    vector<Rect> darts15_truth = load_faces_15();
 
     // load classifier
     if (!cascade.load(cascade_name)) {
@@ -116,85 +131,77 @@ void task_one_b() {
 
     // detect faces using the cascade classifier
     vector<Rect> darts_5_detection = detect(darts5, cascade);
+    vector<Rect> darts_15_detection = detect(darts15, cascade);
 
     // calulate tpr and f1 scores
     int darts5tpr = calculate_tpr(darts5_truth, darts_5_detection, darts5);
     double f1 = calculate_f1(darts5tpr, (int) darts_5_detection.size(), (int) darts5_truth.size());
-    cout << "f1 score: " << f1 << endl;
+
+    int darts15tpr = calculate_tpr(darts15_truth, darts_15_detection, darts15);
+    double f1_15 = calculate_f1(darts15tpr, (int) darts_15_detection.size(), (int) darts15_truth.size());
+
+    cout << "darts5 tpr: " << darts5tpr << endl;
+    cout << "darts 5 f1 score: " << f1 << endl;
+
+    cout << "darts15 tpr: " << darts15tpr << endl;
+    cout << "darts 15 f1 score: " << f1_15 << endl;
+
 }
 
-/** find if two rects overlap **/
-int overlap(Rect a, Rect b) {
-    if ((a.x + a.width) <= b.x || a.x >= (b.x + b.width) || a.y >= (b.y + b.height) || (a.y + a.height) <= b.y) {
-        return 0;
+/** Test the dartboard detector on all example images **/
+void task_two_b(){
+    vector<Mat> frames;
+    vector<vector<Rect>> rects;
+    vector<int> tpr;
+    vector<double> f1_scores;
+    vector<vector<Rect>> true_labels;
+    char input_str[18];
+
+    // 1. Load the Strong Classifier in a structure called `Cascade'
+    if (!cascade.load(cascade_dart_name)) {
+        printf("--(!)Error loading\n");
+        return;
+    };
+
+    true_labels = load_dart_labels();
+
+    for (int i = 0; i < 16; i++) {
+        sprintf(input_str, "../img/dart%d.jpg", i);
+        frames.emplace_back(imread(input_str));
     }
-    return 1;
-}
 
+    // detect all rects
+    for (Mat m : frames){
+        rects.emplace_back(detect(m, cascade));
+    }
 
-/** calculate the true positive rate **/
-int calculate_tpr(vector<Rect> ground_truth, vector<Rect> detections, Mat image) {
+    for (int i = 0; i < 16; i++){
+        for (int j = 0; j < rects[i].size(); j++){
+            rectangle(frames[i], Point(rects[i][j].x, rects[i][j].y),
+                      Point(rects[i][j].x + rects[i][j].width, rects[i][j].y + rects[i][j].height), Scalar(0, 255, 0), 2);
 
-    vector<Rect> correct_detections;
-
-    for (Rect rect_a : ground_truth) {
-        for (Rect rect_b: detections) {
-
-            // if no overlap, continue to next iteration
-            if (!overlap(rect_a, rect_b)) {
-                continue;
-            } else {
-
-                // Calculate the overlapping area
-                int width = min(rect_a.x + rect_a.width, rect_b.x + rect_b.width) - max(rect_a.x, rect_b.x);
-                int height = min(rect_a.y + rect_a.height, rect_b.y + rect_b.height) - max(rect_a.y, rect_b.y);;
-                double overlap = width * height;
-                double overlap_percent = (overlap / rect_a.area()) * 100;
-
-                // if overlap is greater than 75%, add to correct detections
-                if (overlap_percent >= 60 && rect_b.area() <= 2 * rect_a.area()) {
-                    correct_detections.emplace_back(rect_b);
-                    break;
-                }
-            }
         }
-    }
-
-
-    cout << "True detected rects\nx\ty" << endl;
-    for (Rect r : correct_detections) {
-        cout << r.x << "\t" << r.y << endl;
-        rectangle(image, Point(r.x, r.y), Point(r.x + r.width, r.y + r.height), Scalar(0, 255, 0), 2);
+        imshow("frames", frames[i]);
+        waitKey(0);
 
     }
 
-    imshow("Correct detections", image);
-    waitKey(0);
-    cout << "number of true positive detections: " << correct_detections.size() << endl;
-    return (int) correct_detections.size();
-}
+    // calculate tpr
+    for (int i = 0; i < 16; i++){
+        tpr.emplace_back(calculate_tpr(true_labels.at(i), rects.at(i), frames.at(i)));
+    }
 
-/** Calculate the f1 score
- * https://machinelearningmastery.com/classification-accuracy-is-not-enough-more-performance-measures-you-can-use **/
-double calculate_f1(int true_positives, int total_detections, int true_detections) {
-    double false_positives = total_detections - true_positives;
-    double precision = true_positives / (true_positives + false_positives);
-    double false_negatives = true_detections - true_positives;
-    double recall = true_positives / (true_positives + false_negatives);
-    return 2 * ((precision * recall) / (precision + recall));
+    // calculate f1 score for each
+    for (int i = 0; i < 16; i++){
+        f1_scores.emplace_back(calculate_f1(tpr.at(i),rects.at(i).size(),true_labels.at(i).size()));
+        cout << "f1_score: " << f1_scores.at(i) << endl;
+    }
 }
 
 
-vector<Rect> detect(Mat image, CascadeClassifier model) {
-    Mat gray_image;
-    vector<Rect> result;
-    cvtColor(image, gray_image, CV_BGR2GRAY);
-    model.detectMultiScale(gray_image, result, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(50, 50), Size(500, 500));
-    return result;
-}
-
-
-/** @function detectAndDisplay */
+/**
+ * @function detectAndDisplay
+ */
 void detectAndDisplay(Mat frame) {
     std::vector<Rect> faces;
     Mat frame_gray;
