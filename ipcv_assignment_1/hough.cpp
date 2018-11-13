@@ -11,13 +11,33 @@
 using namespace std;
 using namespace cv;
 
-Mat gradXKernel = (Mat_<float>(3, 3) << -1, 0, 1,
-        -2, 0, 2,
-        -1, 0, 1);
+Mat getYKernel() {
+    Mat kernel(Size(3, 3), CV_32F);
+    kernel.at<float>(0, 0) = -1;
+    kernel.at<float>(0, 1) = -2;
+    kernel.at<float>(0, 2) = -1;
+    kernel.at<float>(1, 0) = 0;
+    kernel.at<float>(1, 1) = 0;
+    kernel.at<float>(1, 2) = 0;
+    kernel.at<float>(2, 0) = 1;
+    kernel.at<float>(2, 1) = 2;
+    kernel.at<float>(2, 2) = 1;
+    return kernel;
+}
 
-Mat gradYKernel = (Mat_<float>(3, 3) << -1, -2, 1,
-        0, 0, 0,
-        1, 2, 1);
+Mat getXKernel() {
+    Mat kernel(Size(3, 3), CV_32F);
+    kernel.at<float>(0, 0) = -1;
+    kernel.at<float>(0, 1) = 0;
+    kernel.at<float>(0, 2) = 1;
+    kernel.at<float>(1, 0) = -2;
+    kernel.at<float>(1, 1) = 0;
+    kernel.at<float>(1, 2) = 2;
+    kernel.at<float>(2, 0) = -1;
+    kernel.at<float>(2, 1) = 0;
+    kernel.at<float>(2, 2) = 1;
+    return kernel;
+}
 
 int ***allocate3DArray(int x, int y, int z) {
     int ***the_array = new int **[x];
@@ -36,7 +56,6 @@ int ***allocate3DArray(int x, int y, int z) {
 }
 
 void hough(Mat magn, Mat dir, int threshold, int minRadius, int maxRadius) {
-    printf("%d %d\n", magn.rows, magn.cols);
     int ***vote = allocate3DArray(magn.rows, magn.cols, maxRadius);
 
     for (int i = 0; i < magn.rows; i++) {
@@ -80,6 +99,10 @@ void hough(Mat magn, Mat dir, int threshold, int minRadius, int maxRadius) {
 //    for (int x = 0; x < magn.rows; x++) {
 //        for (int y = 0; y < magn.cols; y++) {
 //            for (int r = minRadius; r < maxRadius; r++) {
+//                if (vote[x][y][r] > 4) {
+//                    printf("%d %d %d %d \n", x, y, r, vote[x][y][r]);
+//                }
+//
 //                if (vote[x][y][r] > threshold) {
 //                    Point center(x, y);
 //                    circle(result, center, r, 255);
@@ -94,6 +117,9 @@ void hough(Mat magn, Mat dir, int threshold, int minRadius, int maxRadius) {
 }
 
 Mat gradMagnitude(Mat input) {
+    Mat gradXKernel = getXKernel();
+    Mat gradYKernel = getYKernel();
+
     Mat result(input.rows, input.cols, CV_32F);
 
     int depth = 1;
@@ -119,6 +145,7 @@ Mat gradMagnitude(Mat input) {
         }
     }
 
+//    normalize(result, result, 0, 1, NORM_MINMAX);
 //    imshow("gradient magnitude", result);
 //    waitKey(0);
 
@@ -126,7 +153,10 @@ Mat gradMagnitude(Mat input) {
 }
 
 Mat gradDirection(Mat input) {
-    Mat result(input.rows, input.cols, CV_32F, Scalar::all(255));
+    Mat gradXKernel = getXKernel();
+    Mat gradYKernel = getYKernel();
+
+    Mat result(input.rows, input.cols, CV_32F);
 
     int depth = 1;
 
@@ -146,11 +176,12 @@ Mat gradDirection(Mat input) {
                     }
                 }
 
-                result.at<float>(i, j) = atan2(sumY, sumX);
+                result.at<float>(i, j) = -atan2(sumY, sumX);
             }
         }
     }
 
+//    normalize(result, result, 0, 1, NORM_MINMAX);
 //    imshow("gradient direction", result);
 //    waitKey(0);
 
@@ -167,6 +198,7 @@ void thresholdMag(Mat &image, int threshold) {
             }
         }
     }
+
 //    imshow("threshold", image);
 //    waitKey(0);
 }
@@ -184,12 +216,13 @@ int main(int argc, char **argv) {
     Mat image2;
     image.convertTo(image2, CV_32F);
 
+    Mat mag = gradMagnitude(image2);
+
     Mat dir = gradDirection(image2);
 
-    Mat mag = gradMagnitude(image2);
-    thresholdMag(mag, 150);
+    thresholdMag(mag, 200);
 
-    hough(mag, dir, 6, 40, 50);
+    hough(mag, dir, 5, 20, 100);
 
     return 0;
 }
