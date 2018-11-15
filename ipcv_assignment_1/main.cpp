@@ -4,6 +4,7 @@
 #include "header/load_faces.h"
 #include "header/load_darts.h"
 #include "header/calculations.h"
+#include "header/hough.h"
 
 /** Namespace declaration **/
 using namespace std;
@@ -18,24 +19,25 @@ CascadeClassifier cascade;
 
 
 /** @function main */
-int main(int argc, const char **argv) {
-    CascadeClassifier model;
+int main(int argc, char **argv) {
 
-    if (!model.load(cascade_name)) {
-        printf("--(!)Error loading\n");
-        return 1;
-    };
-
-    vector<Mat> images = load_test_images();
-    vector<vector<Rect>> true_labels = load_face_labels();
-
-    double f1 = calculate_total_f1(images, true_labels, model);
+    char *imageName = argv[1];
+    task_three(imageName);
 
 
 
 
-
-
+//    CascadeClassifier model;
+//
+//    if (!model.load(cascade_name)) {
+//        printf("--(!)Error loading\n");
+//        return 1;
+//    };
+//
+//    vector<Mat> images = load_test_images();
+//    vector<vector<Rect>> true_labels = load_face_labels();
+//
+//    double f1 = calculate_total_f1(images, true_labels, model);
     //label_faces();
     //label_darts();
     //task_one_a();
@@ -46,6 +48,41 @@ int main(int argc, const char **argv) {
 
     return 0;
 }
+
+
+void task_three(char *imageName){
+    // declare & read in image
+    Mat image, image2, norm, blur_img;
+    image = imread(imageName, CV_LOAD_IMAGE_GRAYSCALE);
+
+    if (!image.data) {
+        printf(" No image data \n ");
+        return;
+    }
+
+    // convert to CV_32F
+    image.convertTo(image2, CV_32F);
+
+    GaussianBlur(image2, blur_img, Size( 5, 5 ), 0, 0);
+
+    Mat mag = gradMagnitude(blur_img);
+
+
+    Mat dir = gradDirection(image2);
+
+
+
+    thresholdMag(mag, 150);
+//    normalize(mag, norm, 0, 1, NORM_MINMAX);
+//    imshow("magnitude", norm);
+//    waitKey(0);
+
+    hough(mag, dir, 20, 20, 50);
+
+}
+
+
+
 
 void task_two() {
     // 1. Load the Strong Classifier in a structure called `Cascade'

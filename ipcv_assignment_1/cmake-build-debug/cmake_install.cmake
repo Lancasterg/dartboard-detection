@@ -1,4 +1,4 @@
-# Install script for directory: /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1
+# Install script for directory: /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

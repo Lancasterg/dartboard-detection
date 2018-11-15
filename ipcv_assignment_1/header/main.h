@@ -29,5 +29,7 @@ void task_two();
 
 void task_two_b();
 
+void task_three(char *imageName);
+
 
 #endif //OPENCV_MAIN_H

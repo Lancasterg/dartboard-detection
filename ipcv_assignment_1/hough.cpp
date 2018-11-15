@@ -7,9 +7,11 @@
 #include "opencv2/imgproc/imgproc.hpp"    //depending on your machine setup
 #include <opencv/cxcore.h>    //depending on your machine setup
 #include <math.h>
+#include "header/hough.h"
 
 using namespace std;
 using namespace cv;
+
 
 Mat getYKernel() {
     Mat kernel(Size(3, 3), CV_32F);
@@ -63,57 +65,64 @@ void hough(Mat magn, Mat dir, int threshold, int minRadius, int maxRadius) {
             float mag = magn.at<float>(i, j);
             float ori = dir.at<float>(i, j);
 
-            if (mag > 30) {
+            if (mag == 255) {
                 for (int r = minRadius; r < maxRadius; r++) {
-                    int x0 = (int) (i - r * cos(ori));
-                    int y0 = (int) (j - r * sin(ori));
-                    if (x0 >= 0 && x0 < magn.rows && y0 >= 0 && y0 < magn.cols) {
-                        vote[x0][y0][r] += 1;
-                    }
-
-                    x0 = (int) (i + r * cos(ori));
-                    y0 = (int) (j + r * sin(ori));
-                    if (x0 >= 0 && x0 < magn.rows && y0 >= 0 && y0 < magn.cols) {
-                        vote[x0][y0][r] += 1;
+                    for (int t = 0; t < 360; t+=20) {
+                        int x0 = (int) (i - (r) * cos(t));
+                        int y0 = (int) (j - (r) * sin(t));
+                        if (x0 >= 0 && x0 < magn.rows && y0 >= 0 && y0 < magn.cols) {
+                            vote[x0][y0][r] += 1;
+                        }
+                        x0 = (int) (i + (r) * cos(t));
+                        y0 = (int) (j + (r) * sin(t));
+                        if (x0 >= 0 && x0 < magn.rows && y0 >= 0 && y0 < magn.cols) {
+                            vote[x0][y0][r] += 1;
+                        }
                     }
                 }
             }
         }
     }
 
-    Mat result(magn.rows, magn.cols, CV_32F);
+    Mat hough_space(magn.rows, magn.cols, CV_32F);
 
     for (int x = 0; x < magn.rows; x++) {
         for (int y = 0; y < magn.cols; y++) {
-            int sumRadius = 0;
             for (int r = minRadius; r < maxRadius; r++) {
-                sumRadius += vote[x][y][r];
+                hough_space.at<float>(x, y) += vote[x][y][r];
             }
-
-            result.at<float>(x, y) = sumRadius;
         }
     }
 
-    normalize(result, result, 0, 1, NORM_MINMAX);
+    Mat image = imread("../img/coins1.png");
 
-//    for (int x = 0; x < magn.rows; x++) {
-//        for (int y = 0; y < magn.cols; y++) {
-//            for (int r = minRadius; r < maxRadius; r++) {
-//                if (vote[x][y][r] > 4) {
-//                    printf("%d %d %d %d \n", x, y, r, vote[x][y][r]);
-//                }
-//
-//                if (vote[x][y][r] > threshold) {
-//                    Point center(x, y);
-//                    circle(result, center, r, 255);
-//                }
-//            }
-//        }
-//    }
 
-    imshow("hough", result);
+
+    for (int x = 0; x < magn.rows; x++) {
+        for (int y = 0; y < magn.cols; y++) {
+            for (int r = minRadius; r < maxRadius; r++) {
+                if (vote[x][y][r] > 10) {
+                    printf("%d %d %d %d \n", x, y, r, vote[x][y][r]);
+                }
+
+                if (vote[x][y][r] > threshold) {
+                    Point center(y, x);
+                    circle(image, center, r, Scalar(255, 0, 0));
+                }
+            }
+        }
+    }
+
+    //normalize(image, image, 0, 1, NORM_MINMAX);
+    imshow("detected circles", image);
     waitKey(0);
-    result.release();
+
+
+
+    normalize(hough_space, hough_space, 0, 1, NORM_MINMAX);
+    imshow("hough", hough_space);
+    waitKey(0);
+    hough_space.release();
 }
 
 Mat gradMagnitude(Mat input) {
@@ -201,28 +210,4 @@ void thresholdMag(Mat &image, int threshold) {
 
 //    imshow("threshold", image);
 //    waitKey(0);
-}
-
-int main(int argc, char **argv) {
-    char *imageName = argv[1];
-
-    Mat image = imread(imageName, CV_LOAD_IMAGE_GRAYSCALE);
-
-    if (argc != 2 || !image.data) {
-        printf(" No image data \n ");
-        return -1;
-    }
-
-    Mat image2;
-    image.convertTo(image2, CV_32F);
-
-    Mat mag = gradMagnitude(image2);
-
-    Mat dir = gradDirection(image2);
-
-    thresholdMag(mag, 200);
-
-    hough(mag, dir, 5, 20, 100);
-
-    return 0;
 }
