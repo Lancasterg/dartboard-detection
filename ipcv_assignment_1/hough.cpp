@@ -57,7 +57,15 @@ int ***allocate3DArray(int x, int y, int z) {
     return the_array;
 }
 
-void hough(Mat magn, Mat dir, int threshold, int minRadius, int maxRadius) {
+
+void display(const string &name, Mat src) {
+    cv::Mat dst = src.clone();
+    normalize(dst, dst, 0, 1, NORM_MINMAX);
+    imshow(name, dst);
+    waitKey(0);
+}
+
+void hough(string imageName, Mat magn, Mat dir, int threshold, int minRadius, int maxRadius) {
     int ***vote = allocate3DArray(magn.rows, magn.cols, maxRadius);
 
     for (int i = 0; i < magn.rows; i++) {
@@ -65,19 +73,17 @@ void hough(Mat magn, Mat dir, int threshold, int minRadius, int maxRadius) {
             float mag = magn.at<float>(i, j);
             float ori = dir.at<float>(i, j);
 
-            if (mag == 255) {
+            if (abs(mag - 255) < 1e-4) {
                 for (int r = minRadius; r < maxRadius; r++) {
-                    for (int t = 0; t < 360; t+=20) {
-                        int x0 = (int) (i - (r) * cos(t));
-                        int y0 = (int) (j - (r) * sin(t));
-                        if (x0 >= 0 && x0 < magn.rows && y0 >= 0 && y0 < magn.cols) {
-                            vote[x0][y0][r] += 1;
-                        }
-                        x0 = (int) (i + (r) * cos(t));
-                        y0 = (int) (j + (r) * sin(t));
-                        if (x0 >= 0 && x0 < magn.rows && y0 >= 0 && y0 < magn.cols) {
-                            vote[x0][y0][r] += 1;
-                        }
+                    int x0 = (int) (i - (r) * sin(ori));
+                    int y0 = (int) (j - (r) * cos(ori));
+                    if (x0 >= 0 && x0 < magn.rows && y0 >= 0 && y0 < magn.cols) {
+                        vote[x0][y0][r] += 1;
+                    }
+                    x0 = (int) (i + (r) * sin(ori));
+                    y0 = (int) (j + (r) * cos(ori));
+                    if (x0 >= 0 && x0 < magn.rows && y0 >= 0 && y0 < magn.cols) {
+                        vote[x0][y0][r] += 1;
                     }
                 }
             }
@@ -94,14 +100,14 @@ void hough(Mat magn, Mat dir, int threshold, int minRadius, int maxRadius) {
         }
     }
 
-    Mat image = imread("../img/coins1.png");
+    display("hough space", hough_space);
 
-
+    Mat image = imread(imageName);
 
     for (int x = 0; x < magn.rows; x++) {
         for (int y = 0; y < magn.cols; y++) {
             for (int r = minRadius; r < maxRadius; r++) {
-                if (vote[x][y][r] > 10) {
+                if (vote[x][y][r] > threshold) {
                     printf("%d %d %d %d \n", x, y, r, vote[x][y][r]);
                 }
 
@@ -113,16 +119,9 @@ void hough(Mat magn, Mat dir, int threshold, int minRadius, int maxRadius) {
         }
     }
 
-    //normalize(image, image, 0, 1, NORM_MINMAX);
+
     imshow("detected circles", image);
     waitKey(0);
-
-
-
-    normalize(hough_space, hough_space, 0, 1, NORM_MINMAX);
-    imshow("hough", hough_space);
-    waitKey(0);
-    hough_space.release();
 }
 
 Mat gradMagnitude(Mat input) {
@@ -169,6 +168,9 @@ Mat gradDirection(Mat input) {
 
     int depth = 1;
 
+    Mat dx(input.rows, input.cols, CV_32F);
+    Mat dy(input.rows, input.cols, CV_32F);
+
     // now we can do the convolution
     for (int i = 0; i < input.rows; i++) {
         for (int j = 0; j < input.cols; j++) {
@@ -185,10 +187,15 @@ Mat gradDirection(Mat input) {
                     }
                 }
 
-                result.at<float>(i, j) = -atan2(sumY, sumX);
+                dx.at<float>(i, j) = sumX;
+                dy.at<float>(i, j) = sumY;
+                result.at<float>(i, j) = atan2(sumY, sumX);
             }
         }
     }
+
+    display("dx", dx);
+    display("dy", dy);
 
 //    normalize(result, result, 0, 1, NORM_MINMAX);
 //    imshow("gradient direction", result);
@@ -207,7 +214,26 @@ void thresholdMag(Mat &image, int threshold) {
             }
         }
     }
+}
 
-//    imshow("threshold", image);
-//    waitKey(0);
+int main(int argc, char **argv) {
+    string imageName = "coins1.png";
+    Mat image = imread(imageName, CV_LOAD_IMAGE_GRAYSCALE);
+
+    Mat image2, blur_img;
+    // convert to CV_32F
+    image.convertTo(image2, CV_32F);
+
+    GaussianBlur(image2, blur_img, Size(5, 5), 0, 0);
+
+    Mat mag = gradMagnitude(blur_img);
+    display("gradient magnitude", mag);
+
+    thresholdMag(mag, 120);
+    display("threshold magnitude", mag);
+
+    Mat dir = gradDirection(blur_img);
+    display("gradient direction", dir);
+
+    hough(imageName, mag, dir, 15, 40, 50);
 }

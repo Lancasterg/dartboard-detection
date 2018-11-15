@@ -77,7 +77,7 @@ void task_three(char *imageName){
 //    imshow("magnitude", norm);
 //    waitKey(0);
 
-    hough(mag, dir, 20, 20, 50);
+    hough(imageName, mag, dir, 20, 20, 50);
 
 }
 
