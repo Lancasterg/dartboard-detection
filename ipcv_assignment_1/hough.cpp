@@ -58,7 +58,7 @@ int ***allocate3DArray(int x, int y, int z) {
 }
 
 
-void display(const string &name, Mat src) {
+void display(const string &name, const Mat &src) {
     cv::Mat dst = src.clone();
     normalize(dst, dst, 0, 1, NORM_MINMAX);
     imshow(name, dst);
@@ -217,7 +217,7 @@ void thresholdMag(Mat &image, int threshold) {
 }
 
 int main(int argc, char **argv) {
-    string imageName = "coins1.png";
+    string imageName = "img/dart0.jpg";
     Mat image = imread(imageName, CV_LOAD_IMAGE_GRAYSCALE);
 
     Mat image2, blur_img;
