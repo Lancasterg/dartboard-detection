@@ -2,7 +2,35 @@
 // Created by George Lancaster on 12/11/2018.
 //
 #include "header/calculations.h"
+#include "header/hough.h"
 
+
+
+vector<Rect> detect_dartboards(Mat image, CascadeClassifier model){
+    vector<Rect> ret;
+    vector<Rect> circles = hough_circle(image, 12, 40, 80);
+    vector<Rect> boards;
+    vector<Rect> det_boards;
+
+
+    if(circles.size() != 0){
+        for (Rect r : circles){
+            Mat roi = Mat(image, r);
+            model.detectMultiScale(roi, boards, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(50, 50), Size(500, 500));
+            if (boards.size() != 0){ // if a detection has been made
+                Rect rect(boards[0].x + r.x, boards[0].y + r.y,boards[0].width, boards[0].height);
+                det_boards.emplace_back(rect);
+            }
+
+        }
+    }else{  // circles is empty
+        model.detectMultiScale(image, det_boards, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(50, 50), Size(500, 500));
+    }
+    if(det_boards.size() == 0){
+        model.detectMultiScale(image, det_boards, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(50, 50), Size(500, 500));
+    }
+    return det_boards;
+}
 
 
 

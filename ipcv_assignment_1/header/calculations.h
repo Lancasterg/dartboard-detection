@@ -11,6 +11,7 @@ using namespace std;
 
 double calculate_f1(int true_positives, int total_detections, int true_detections);
 vector<Rect> detect(Mat image, CascadeClassifier model);
+vector<Rect> detect_dartboards(Mat image, CascadeClassifier model);
 int calculate_tpr(vector<Rect> ground_truth, vector<Rect> detections, Mat image);
 int overlap(Rect a, Rect b);
 void detectAndDisplay(Mat frame);
