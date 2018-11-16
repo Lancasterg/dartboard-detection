@@ -43,10 +43,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1
+CMAKE_SOURCE_DIR = /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/cmake-build-debug
+CMAKE_BINARY_DIR = /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/opencv.dir/depend.make
@@ -59,62 +59,76 @@ include CMakeFiles/opencv.dir/flags.make
 
 CMakeFiles/opencv.dir/main.cpp.o: CMakeFiles/opencv.dir/flags.make
 CMakeFiles/opencv.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/opencv.dir/main.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/opencv.dir/main.cpp.o -c /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/opencv.dir/main.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/opencv.dir/main.cpp.o -c /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/main.cpp
 
 CMakeFiles/opencv.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/opencv.dir/main.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/main.cpp > CMakeFiles/opencv.dir/main.cpp.i
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/main.cpp > CMakeFiles/opencv.dir/main.cpp.i
 
 CMakeFiles/opencv.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/opencv.dir/main.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/main.cpp -o CMakeFiles/opencv.dir/main.cpp.s
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/main.cpp -o CMakeFiles/opencv.dir/main.cpp.s
 
 CMakeFiles/opencv.dir/load_faces.cpp.o: CMakeFiles/opencv.dir/flags.make
 CMakeFiles/opencv.dir/load_faces.cpp.o: ../load_faces.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/opencv.dir/load_faces.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/opencv.dir/load_faces.cpp.o -c /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/load_faces.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/opencv.dir/load_faces.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/opencv.dir/load_faces.cpp.o -c /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/load_faces.cpp
 
 CMakeFiles/opencv.dir/load_faces.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/opencv.dir/load_faces.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/load_faces.cpp > CMakeFiles/opencv.dir/load_faces.cpp.i
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/load_faces.cpp > CMakeFiles/opencv.dir/load_faces.cpp.i
 
 CMakeFiles/opencv.dir/load_faces.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/opencv.dir/load_faces.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/load_faces.cpp -o CMakeFiles/opencv.dir/load_faces.cpp.s
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/load_faces.cpp -o CMakeFiles/opencv.dir/load_faces.cpp.s
 
 CMakeFiles/opencv.dir/load_darts.cpp.o: CMakeFiles/opencv.dir/flags.make
 CMakeFiles/opencv.dir/load_darts.cpp.o: ../load_darts.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/opencv.dir/load_darts.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/opencv.dir/load_darts.cpp.o -c /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/load_darts.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/opencv.dir/load_darts.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/opencv.dir/load_darts.cpp.o -c /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/load_darts.cpp
 
 CMakeFiles/opencv.dir/load_darts.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/opencv.dir/load_darts.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/load_darts.cpp > CMakeFiles/opencv.dir/load_darts.cpp.i
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/load_darts.cpp > CMakeFiles/opencv.dir/load_darts.cpp.i
 
 CMakeFiles/opencv.dir/load_darts.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/opencv.dir/load_darts.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/load_darts.cpp -o CMakeFiles/opencv.dir/load_darts.cpp.s
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/load_darts.cpp -o CMakeFiles/opencv.dir/load_darts.cpp.s
 
 CMakeFiles/opencv.dir/calculations.cpp.o: CMakeFiles/opencv.dir/flags.make
 CMakeFiles/opencv.dir/calculations.cpp.o: ../calculations.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/opencv.dir/calculations.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/opencv.dir/calculations.cpp.o -c /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/calculations.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/opencv.dir/calculations.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/opencv.dir/calculations.cpp.o -c /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/calculations.cpp
 
 CMakeFiles/opencv.dir/calculations.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/opencv.dir/calculations.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/calculations.cpp > CMakeFiles/opencv.dir/calculations.cpp.i
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/calculations.cpp > CMakeFiles/opencv.dir/calculations.cpp.i
 
 CMakeFiles/opencv.dir/calculations.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/opencv.dir/calculations.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/calculations.cpp -o CMakeFiles/opencv.dir/calculations.cpp.s
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/calculations.cpp -o CMakeFiles/opencv.dir/calculations.cpp.s
+
+CMakeFiles/opencv.dir/hough.cpp.o: CMakeFiles/opencv.dir/flags.make
+CMakeFiles/opencv.dir/hough.cpp.o: ../hough.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/opencv.dir/hough.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/opencv.dir/hough.cpp.o -c /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/hough.cpp
+
+CMakeFiles/opencv.dir/hough.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/opencv.dir/hough.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/hough.cpp > CMakeFiles/opencv.dir/hough.cpp.i
+
+CMakeFiles/opencv.dir/hough.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/opencv.dir/hough.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/hough.cpp -o CMakeFiles/opencv.dir/hough.cpp.s
 
 # Object files for target opencv
 opencv_OBJECTS = \
 "CMakeFiles/opencv.dir/main.cpp.o" \
 "CMakeFiles/opencv.dir/load_faces.cpp.o" \
 "CMakeFiles/opencv.dir/load_darts.cpp.o" \
-"CMakeFiles/opencv.dir/calculations.cpp.o"
+"CMakeFiles/opencv.dir/calculations.cpp.o" \
+"CMakeFiles/opencv.dir/hough.cpp.o"
 
 # External object files for target opencv
 opencv_EXTERNAL_OBJECTS =
@@ -123,6 +137,7 @@ opencv: CMakeFiles/opencv.dir/main.cpp.o
 opencv: CMakeFiles/opencv.dir/load_faces.cpp.o
 opencv: CMakeFiles/opencv.dir/load_darts.cpp.o
 opencv: CMakeFiles/opencv.dir/calculations.cpp.o
+opencv: CMakeFiles/opencv.dir/hough.cpp.o
 opencv: CMakeFiles/opencv.dir/build.make
 opencv: /usr/local/lib/libopencv_stitching.3.4.2.dylib
 opencv: /usr/local/lib/libopencv_superres.3.4.2.dylib
@@ -168,7 +183,7 @@ opencv: /usr/local/lib/libopencv_objdetect.3.4.2.dylib
 opencv: /usr/local/lib/libopencv_imgproc.3.4.2.dylib
 opencv: /usr/local/lib/libopencv_core.3.4.2.dylib
 opencv: CMakeFiles/opencv.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable opencv"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable opencv"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/opencv.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -181,6 +196,6 @@ CMakeFiles/opencv.dir/clean:
 .PHONY : CMakeFiles/opencv.dir/clean
 
 CMakeFiles/opencv.dir/depend:
-	cd /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1 /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1 /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/cmake-build-debug /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/cmake-build-debug /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles/opencv.dir/DependInfo.cmake --color=$(COLOR)
+	cd /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1 /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1 /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/cmake-build-debug /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/cmake-build-debug /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles/opencv.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/opencv.dir/depend
 

@@ -6,15 +6,39 @@
 
 #IncludeRegexTransform: 
 
-/Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/calculations.cpp
-header/calculations.h
-/Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/header/calculations.h
-
-/Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/header/calculations.h
+/Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/header/hough.h
 stdio.h
 -
 opencv2/opencv.hpp
 -
+
+/Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/hough.cpp
+stdio.h
+-
+opencv/cv.h
+-
+opencv2/highgui/highgui.hpp
+/Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/opencv2/highgui/highgui.hpp
+opencv2/imgproc/imgproc.hpp
+/Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/opencv2/imgproc/imgproc.hpp
+opencv/cxcore.h
+-
+math.h
+-
+header/hough.h
+/Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/header/hough.h
+
+/usr/local/include/opencv/cv.h
+opencv2/core/core_c.h
+/usr/local/include/opencv/opencv2/core/core_c.h
+opencv2/imgproc/imgproc_c.h
+/usr/local/include/opencv/opencv2/imgproc/imgproc_c.h
+opencv2/photo/photo_c.h
+/usr/local/include/opencv/opencv2/photo/photo_c.h
+opencv2/video/tracking_c.h
+/usr/local/include/opencv/opencv2/video/tracking_c.h
+opencv2/objdetect/objdetect_c.h
+/usr/local/include/opencv/opencv2/objdetect/objdetect_c.h
 
 /usr/local/include/opencv/cxcore.h
 opencv2/core/core_c.h
@@ -844,6 +868,10 @@ opencv2/videoio.hpp
 opencv2/highgui/highgui_c.h
 /usr/local/include/opencv2/opencv2/highgui/highgui_c.h
 
+/usr/local/include/opencv2/highgui/highgui.hpp
+opencv2/highgui.hpp
+/usr/local/include/opencv2/highgui/opencv2/highgui.hpp
+
 /usr/local/include/opencv2/highgui/highgui_c.h
 opencv2/core/core_c.h
 /usr/local/include/opencv2/highgui/opencv2/core/core_c.h
@@ -867,6 +895,10 @@ opencv2/core.hpp
 /usr/local/include/opencv2/opencv2/core.hpp
 opencv2/imgproc/imgproc_c.h
 /usr/local/include/opencv2/opencv2/imgproc/imgproc_c.h
+
+/usr/local/include/opencv2/imgproc/imgproc.hpp
+opencv2/imgproc.hpp
+/usr/local/include/opencv2/imgproc/opencv2/imgproc.hpp
 
 /usr/local/include/opencv2/imgproc/imgproc_c.h
 opencv2/imgproc/types_c.h

@@ -48,10 +48,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1
+CMAKE_SOURCE_DIR = /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/cmake-build-debug
+CMAKE_BINARY_DIR = /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/george/Dropbox/university_of_bristol/sem_1/image_processing_computer_vision/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/george/Bristol/image_processing/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -149,6 +149,33 @@ calculations.s: calculations.cpp.s
 calculations.cpp.s:
 	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/calculations.cpp.s
 .PHONY : calculations.cpp.s
+
+hough.o: hough.cpp.o
+
+.PHONY : hough.o
+
+# target to build an object file
+hough.cpp.o:
+	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/hough.cpp.o
+.PHONY : hough.cpp.o
+
+hough.i: hough.cpp.i
+
+.PHONY : hough.i
+
+# target to preprocess a source file
+hough.cpp.i:
+	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/hough.cpp.i
+.PHONY : hough.cpp.i
+
+hough.s: hough.cpp.s
+
+.PHONY : hough.s
+
+# target to generate assembly for a file
+hough.cpp.s:
+	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/hough.cpp.s
+.PHONY : hough.cpp.s
 
 load_darts.o: load_darts.cpp.o
 
@@ -243,6 +270,9 @@ help:
 	@echo "... calculations.o"
 	@echo "... calculations.i"
 	@echo "... calculations.s"
+	@echo "... hough.o"
+	@echo "... hough.i"
+	@echo "... hough.s"
 	@echo "... load_darts.o"
 	@echo "... load_darts.i"
 	@echo "... load_darts.s"
