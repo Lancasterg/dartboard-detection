@@ -17,7 +17,9 @@ Mat getXKernel();
 
 int ***allocate3DArray(int x, int y, int z);
 
-void hough(string imageName, Mat magn, Mat dir, int threshold, int minRadius, int maxRadius);
+vector<Vec2f> hough_line(const Mat &src, int threshold, int delta);
+
+vector<Vec3f> hough_circle(const Mat &src, int threshold, int minRadius, int maxRadius);
 
 Mat gradMagnitude(Mat input);
 

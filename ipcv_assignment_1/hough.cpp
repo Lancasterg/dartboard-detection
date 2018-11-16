@@ -12,7 +12,6 @@
 using namespace std;
 using namespace cv;
 
-
 Mat getYKernel() {
     Mat kernel(Size(3, 3), CV_32F);
     kernel.at<float>(0, 0) = -1;
@@ -64,7 +63,24 @@ void display(const string &name, const Mat &src) {
     waitKey(0);
 }
 
-void hough(string imageName, Mat magn, Mat dir, int threshold, int minRadius, int maxRadius) {
+vector<Vec3f> hough_circle(const Mat &src, int threshold, int minRadius, int maxRadius) {
+    Mat gray_image;
+    cvtColor(src, gray_image, CV_BGR2GRAY);
+
+    Mat image, blur_img;
+    gray_image.convertTo(image, CV_32F);
+
+    GaussianBlur(image, blur_img, Size(5, 5), 0, 0);
+
+    Mat magn = gradMagnitude(blur_img);
+    display("gradient magnitude", magn);
+
+    thresholdMag(magn, 120);
+    display("threshold magnitude", magn);
+
+    Mat dir = gradDirection(blur_img);
+    display("gradient direction", dir);
+
     int ***vote = allocate3DArray(magn.rows, magn.cols, maxRadius);
 
     for (int i = 0; i < magn.rows; i++) {
@@ -101,29 +117,44 @@ void hough(string imageName, Mat magn, Mat dir, int threshold, int minRadius, in
 
     display("hough space", hough_space);
 
-    Mat image = imread(imageName);
-
+    vector<Vec3f> circles;
     for (int x = 0; x < magn.rows; x++) {
         for (int y = 0; y < magn.cols; y++) {
             for (int r = minRadius; r < maxRadius; r++) {
                 if (vote[x][y][r] > threshold) {
-//                    printf("%d %d %d %d \n", x, y, r, vote[x][y][r]);
-                }
-
-                if (vote[x][y][r] > threshold) {
+                    // printf("%d %d %d %d \n", x, y, r, vote[x][y][r]);
                     Point center(y, x);
-                    circle(image, center, r, Scalar(255, 0, 0));
+                    circle(src, center, r, Scalar(255, 0, 0));
+                    circles.insert(circles.end(), Vec3f(x, y, r));
                 }
             }
         }
     }
 
-
-    imshow("detected circles", image);
+    imshow("detected circles", src);
     waitKey(0);
+
+    return circles;
 }
 
-void hough_line(const string &imageName, Mat magn, Mat dir, int threshold, int delta) {
+vector<Vec2f> hough_line(const Mat &src, int threshold, int delta) {
+    Mat gray_image;
+    cvtColor(src, gray_image, CV_BGR2GRAY);
+
+    Mat image, blur_img;
+    gray_image.convertTo(image, CV_32F);
+
+    GaussianBlur(image, blur_img, Size(5, 5), 0, 0);
+
+    Mat magn = gradMagnitude(blur_img);
+    display("gradient magnitude", magn);
+
+    thresholdMag(magn, 120);
+    display("threshold magnitude", magn);
+
+    Mat dir = gradDirection(blur_img);
+    display("gradient direction", dir);
+
     int diag = (int) floor(sqrt(magn.rows * magn.rows + magn.cols * magn.cols));
 
     Mat hough_space(diag, 361, CV_32F);
@@ -146,8 +177,7 @@ void hough_line(const string &imageName, Mat magn, Mat dir, int threshold, int d
         }
     }
 
-    Mat image = imread(imageName);
-
+    vector<Vec2f> lines;
     for (int rho = 0; rho < hough_space.rows; rho++) {
         for (int thetaDegree = 0; thetaDegree < hough_space.cols; thetaDegree++) {
             if (hough_space.at<float>(rho, thetaDegree) > threshold) {
@@ -160,18 +190,18 @@ void hough_line(const string &imageName, Mat magn, Mat dir, int threshold, int d
                 pt1.y = cvRound(y0 + 1000 * (a));
                 pt2.x = cvRound(x0 - 1000 * (-b));
                 pt2.y = cvRound(y0 - 1000 * (a));
-                line(image, pt1, pt2, Scalar(0, 0, 255), 1, CV_AA);
-                printf("%d %d %.2f\n", rho, thetaDegree, hough_space.at<float>(rho, thetaDegree));
+                line(src, pt1, pt2, Scalar(0, 0, 255), 1, CV_AA);
+
+                lines.insert(lines.end(), Vec2f(rho, (float) theta));
+//                printf("%d %d %.2f\n", rho, thetaDegree, hough_space.at<float>(rho, thetaDegree));
             }
         }
     }
 
-    imshow("detected lines", image);
+    imshow("detected lines", src);
     waitKey(0);
 
-    hough_space = hough_space + 1;
-    log(hough_space, hough_space);
-    display("hough space", hough_space);
+    return lines;
 }
 
 Mat gradMagnitude(Mat input) {
@@ -269,29 +299,16 @@ void thresholdMag(Mat &image, int threshold) {
 int main(int argc, char **argv) {
     const char *imageName = argc >= 2 ? argv[1] : "pic1.jpg";
 
-    Mat image = imread(imageName, CV_LOAD_IMAGE_GRAYSCALE);
+    Mat image = imread(imageName);
+
+    imshow("original", image);
+    waitKey(0);
 
     if (image.empty()) {
         cout << "can not open " << imageName << endl;
         return -1;
     }
 
-    Mat image2, blur_img;
-
-    // convert to CV_32F
-    image.convertTo(image2, CV_32F);
-
-    GaussianBlur(image2, blur_img, Size(5, 5), 0, 0);
-
-    Mat mag = gradMagnitude(blur_img);
-    display("gradient magnitude", mag);
-
-    thresholdMag(mag, 120);
-    display("threshold magnitude", mag);
-
-    Mat dir = gradDirection(blur_img);
-    display("gradient direction", dir);
-
-//    hough(imageName, mag, dir, 15, 40, 50);
-    hough_line(imageName, mag, dir, 140, 40);
+    vector<Vec3f> circles = hough_circle(image, 15, 40, 50);
+//    vector<Vec2f> lines = hough_line(image, 80, 20);
 }
