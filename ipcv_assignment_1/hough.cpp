@@ -57,7 +57,6 @@ int ***allocate3DArray(int x, int y, int z) {
     return the_array;
 }
 
-
 void display(const string &name, const Mat &src) {
     cv::Mat dst = src.clone();
     normalize(dst, dst, 0, 1, NORM_MINMAX);
@@ -108,7 +107,7 @@ void hough(string imageName, Mat magn, Mat dir, int threshold, int minRadius, in
         for (int y = 0; y < magn.cols; y++) {
             for (int r = minRadius; r < maxRadius; r++) {
                 if (vote[x][y][r] > threshold) {
-                    printf("%d %d %d %d \n", x, y, r, vote[x][y][r]);
+//                    printf("%d %d %d %d \n", x, y, r, vote[x][y][r]);
                 }
 
                 if (vote[x][y][r] > threshold) {
@@ -122,6 +121,57 @@ void hough(string imageName, Mat magn, Mat dir, int threshold, int minRadius, in
 
     imshow("detected circles", image);
     waitKey(0);
+}
+
+void hough_line(const string &imageName, Mat magn, Mat dir, int threshold, int delta) {
+    int diag = (int) floor(sqrt(magn.rows * magn.rows + magn.cols * magn.cols));
+
+    Mat hough_space(diag, 361, CV_32F);
+
+    for (int i = 0; i < magn.rows; i++) {
+        for (int j = 0; j < magn.cols; j++) {
+            float mag = magn.at<float>(i, j);
+            float ori = dir.at<float>(i, j);
+            int oriDegree = (int) (ori * 180 / M_PI);
+
+            if (abs(mag - 255) < 1e-4) {
+                for (int thetaDegree = oriDegree - delta; thetaDegree < oriDegree + delta; thetaDegree++) {
+                    float theta = thetaDegree * (float) M_PI / 180;
+                    int rho = (int) (i * sin(theta) + j * cos(theta));
+                    if (rho >= 0 && rho < diag && thetaDegree >= 0 && thetaDegree <= 360) {
+                        hough_space.at<float>(rho, thetaDegree) += 1;
+                    }
+                }
+            }
+        }
+    }
+
+    Mat image = imread(imageName);
+
+    for (int rho = 0; rho < hough_space.rows; rho++) {
+        for (int thetaDegree = 0; thetaDegree < hough_space.cols; thetaDegree++) {
+            if (hough_space.at<float>(rho, thetaDegree) > threshold) {
+                Point pt1, pt2;
+                double theta = thetaDegree * M_PI / 180;
+
+                double a = cos(theta), b = sin(theta);
+                double x0 = a * rho, y0 = b * rho;
+                pt1.x = cvRound(x0 + 1000 * (-b));
+                pt1.y = cvRound(y0 + 1000 * (a));
+                pt2.x = cvRound(x0 - 1000 * (-b));
+                pt2.y = cvRound(y0 - 1000 * (a));
+                line(image, pt1, pt2, Scalar(0, 0, 255), 1, CV_AA);
+                printf("%d %d %.2f\n", rho, thetaDegree, hough_space.at<float>(rho, thetaDegree));
+            }
+        }
+    }
+
+    imshow("detected lines", image);
+    waitKey(0);
+
+    hough_space = hough_space + 1;
+    log(hough_space, hough_space);
+    display("hough space", hough_space);
 }
 
 Mat gradMagnitude(Mat input) {
@@ -217,10 +267,17 @@ void thresholdMag(Mat &image, int threshold) {
 }
 
 int main(int argc, char **argv) {
-    string imageName = "img/dart0.jpg";
+    const char *imageName = argc >= 2 ? argv[1] : "pic1.jpg";
+
     Mat image = imread(imageName, CV_LOAD_IMAGE_GRAYSCALE);
 
+    if (image.empty()) {
+        cout << "can not open " << imageName << endl;
+        return -1;
+    }
+
     Mat image2, blur_img;
+
     // convert to CV_32F
     image.convertTo(image2, CV_32F);
 
@@ -235,5 +292,6 @@ int main(int argc, char **argv) {
     Mat dir = gradDirection(blur_img);
     display("gradient direction", dir);
 
-    hough(imageName, mag, dir, 15, 40, 50);
+//    hough(imageName, mag, dir, 15, 40, 50);
+    hough_line(imageName, mag, dir, 140, 40);
 }
