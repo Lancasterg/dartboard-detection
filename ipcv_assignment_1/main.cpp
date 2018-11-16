@@ -51,34 +51,25 @@ int main(int argc, char **argv) {
 
 
 void task_three(char *imageName){
-    // declare & read in image
-    Mat image, image2, norm, blur_img;
-    image = imread(imageName, CV_LOAD_IMAGE_GRAYSCALE);
 
-    if (!image.data) {
-        printf(" No image data \n ");
-        return;
-    }
+    Mat image = imread(imageName);
 
-    // convert to CV_32F
-    image.convertTo(image2, CV_32F);
-
-    GaussianBlur(image2, blur_img, Size( 5, 5 ), 0, 0);
-
-    Mat mag = gradMagnitude(blur_img);
-
-
-    Mat dir = gradDirection(image2);
-
-
-
-    thresholdMag(mag, 150);
-//    normalize(mag, norm, 0, 1, NORM_MINMAX);
-//    imshow("magnitude", norm);
+    Mat img = imread(imageName);
+//    imshow("original", image);
 //    waitKey(0);
 
-    hough(imageName, mag, dir, 20, 20, 50);
+    if (image.empty()) {
+        cout << "can not open " << imageName << endl;
+        return;
+    }
+    vector<Rect> circles = hough_circle(image, 13, 40, 80);
 
+
+    for (Rect circ: circles){
+        rectangle(img, circ, Scalar(0, 255, 0), 2);
+    }
+    img.convertTo(img, CV_32F);
+    display("img", img);
 }
 
 

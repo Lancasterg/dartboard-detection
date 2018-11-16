@@ -19,13 +19,17 @@ int ***allocate3DArray(int x, int y, int z);
 
 vector<Vec2f> hough_line(const Mat &src, int threshold, int delta);
 
-vector<Vec3f> hough_circle(const Mat &src, int threshold, int minRadius, int maxRadius);
+vector<Rect> hough_circle(const Mat &src, int threshold, int minRadius, int maxRadius);
 
 Mat gradMagnitude(Mat input);
 
 Mat gradDirection(Mat input);
 
+void display(const string &name, const Mat src);
+
 void thresholdMag(Mat &image, int threshold);
+
+vector<Vec3f>getCircleAreas(vector<Vec3f> circles, Mat image, int minRadius, int maxRadius);
 
 
 #endif //OPENCV_HOUGH_H
