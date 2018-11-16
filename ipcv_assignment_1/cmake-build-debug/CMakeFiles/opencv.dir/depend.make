@@ -3,6 +3,7 @@
 
 CMakeFiles/opencv.dir/calculations.cpp.o: ../calculations.cpp
 CMakeFiles/opencv.dir/calculations.cpp.o: ../header/calculations.h
+CMakeFiles/opencv.dir/calculations.cpp.o: ../header/hough.h
 CMakeFiles/opencv.dir/calculations.cpp.o: /usr/local/include/opencv/cxcore.h
 CMakeFiles/opencv.dir/calculations.cpp.o: /usr/local/include/opencv2/calib3d.hpp
 CMakeFiles/opencv.dir/calculations.cpp.o: /usr/local/include/opencv2/calib3d/calib3d_c.h

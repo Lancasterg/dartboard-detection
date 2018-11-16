@@ -128,13 +128,13 @@ vector<Rect> hough_circle(const Mat &src, int threshold, int minRadius, int maxR
     GaussianBlur(image, blur_img, Size(5, 5), 0, 0);
 
     Mat magn = gradMagnitude(blur_img);
-//    display("gradient magnitude", magn);
+    display("gradient magnitude", magn);
 
     thresholdMag(magn, 120);
-//    display("threshold magnitude", magn);
+    display("threshold magnitude", magn);
 
     Mat dir = gradDirection(blur_img);
-//    display("gradient direction", dir);
+    display("gradient direction", dir);
 
     int ***vote = allocate3DArray(magn.rows, magn.cols, maxRadius);
 
@@ -169,7 +169,7 @@ vector<Rect> hough_circle(const Mat &src, int threshold, int minRadius, int maxR
             }
         }
     }
-//    display("hough space", hough_space);
+    display("hough space", hough_space);
 
 
 
@@ -195,6 +195,8 @@ vector<Rect> hough_circle(const Mat &src, int threshold, int minRadius, int maxR
         }
     }
 
+
+
     // find the connected components
     findContours(blank, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
 
@@ -219,7 +221,7 @@ vector<Rect> hough_circle(const Mat &src, int threshold, int minRadius, int maxR
         det_circles.emplace_back(boundingRect(contours[i]));
     }
 
-    
+
 
     return det_circles;
 }

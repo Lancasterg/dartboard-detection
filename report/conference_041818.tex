@@ -9,6 +9,7 @@
 \usepackage{xcolor}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{multirow}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
@@ -117,26 +118,27 @@ The F1 score of the Viola-Jones classifier, when detecting faces in the test dat
 \begin{table}[htp]
 \caption{F1 scores for all images, when detecting for dartboards using a cascade classier trained on dartboards.}
 \begin{center}
-\begin{tabular}{||c|c||}
+\begin{tabular}{||c|c|c||}
 \hline
-Image Name 		& F1 Score 	\\ \hline
-dart0.jpg			& 0.5	00		\\
-dart1.jpg			& nan		\\
-dart2.jpg			& 0.250		\\
-dart3.jpg			& 1.538		\\
-dart4.jpg			& 0.4	00		\\
-dart5.jpg			& 0.154		\\
-dart6.jpg			& 0.333		\\
-dart7.jpg			& nan		\\
-dart8.jpg			& 0.160		\\
-dart9.jpg			& 0.222		\\
-dart10.jpg			& 0.400		\\
-dart11.jpg			& 0.222		\\
-dart12.jpg			& 0.667		\\
-dart13.jpg			& 0.200		\\
-dart14.jpg			& 0.087		\\
-dart15.jpg			& 0.667		\\ \hline
-Average f1 score 	& 0.276		\\ \hline
+\multirow{2}{*}{Image Name} & \multicolumn{2}{c||}{F1 Score}                \\ 
+                                 & 500 Training Images	& 1000 Training images \\ \hline
+dart0.jpg			& 0.5	00	&	0.250	\\
+dart1.jpg			& 0		&	0.500	\\
+dart2.jpg			& 0.250	&	0.400	\\
+dart3.jpg			& 1.538	&	0.333	\\
+dart4.jpg			& 0.4	00	&	0.250	\\
+dart5.jpg			& 0.154	&	0.200	\\
+dart6.jpg			& 0.333	&	0.500	\\
+dart7.jpg			& 0		&	0.250	\\
+dart8.jpg			& 0.160	&	0.250	\\
+dart9.jpg			& 0.222	&	0.200	\\
+dart10.jpg			& 0.400	&	0.545	\\
+dart11.jpg			& 0.222	&	0.222	\\
+dart12.jpg			& 0.667	&	0.500	\\
+dart13.jpg			& 0.200	&	0.333	\\
+dart14.jpg			& 0.087	&	0.138	\\
+dart15.jpg			& 0.667	&	0.500	\\ \hline
+Average f1 score 	& 0.276	&	0.336	\\ \hline
 \end{tabular}
 \end{center}
 \label{default}

@@ -4,6 +4,7 @@
 CMakeFiles/opencv.dir/calculations.cpp.o
  /Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/calculations.cpp
  /Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/header/calculations.h
+ /Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/header/hough.h
  /usr/local/include/opencv/cxcore.h
  /usr/local/include/opencv2/calib3d.hpp
  /usr/local/include/opencv2/calib3d/calib3d_c.h

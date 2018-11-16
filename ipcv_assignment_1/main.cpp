@@ -13,7 +13,7 @@ using namespace cv;
 
 /** Global variables */
 String cascade_name = "../frontalface.xml";
-String cascade_dart_name = "../training_data/dartcascade/cascade.xml";
+String cascade_dart_name = "../training_data/stage3/cascade.xml";
 CascadeClassifier cascade;
 
 
@@ -22,7 +22,7 @@ CascadeClassifier cascade;
 int main(int argc, char **argv) {
 
     char *imageName = argv[1];
-    task_three(imageName);
+    //task_three(imageName);
 
 
 
@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
     //task_one_b();
     //task_two();
     //task_one_b();
-    //task_two_b();
+    task_two_b();
 
     return 0;
 }
@@ -53,23 +53,36 @@ int main(int argc, char **argv) {
 void task_three(char *imageName){
 
     Mat image = imread(imageName);
-
+    CascadeClassifier model;
     Mat img = imread(imageName);
-//    imshow("original", image);
-//    waitKey(0);
+
+    // 1. Load the Strong Classifier in a structure called `model'
+    if (!model.load(cascade_dart_name)) {
+        printf("--(!)Error loading\n");
+        return;
+    };
 
     if (image.empty()) {
         cout << "can not open " << imageName << endl;
         return;
     }
-    vector<Rect> circles = hough_circle(image, 13, 40, 80);
 
 
-    for (Rect circ: circles){
+    vector<Rect> detected_dartboards = detect_dartboards(image, model);
+
+
+
+
+
+//    vector<Rect> detected_dartboards = hough_circle(image, 13, 40, 80);
+
+    /// Draw and show the detected rects
+    for (Rect circ: detected_dartboards){
         rectangle(img, circ, Scalar(0, 255, 0), 2);
     }
     img.convertTo(img, CV_32F);
     display("img", img);
+
 }
 
 
@@ -89,7 +102,6 @@ void task_two() {
         sprintf(input_str, "../img/dart%d.jpg", i);
         frames[i] = imread(input_str);
     }
-
 
     for (int i = 0; i < 15; i++) {
         char output[50];
