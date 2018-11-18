@@ -29,6 +29,8 @@ vector<Rect> detect_dartboards(Mat image, CascadeClassifier model){
     if(det_boards.size() == 0){
         model.detectMultiScale(image, det_boards, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(50, 50), Size(500, 500));
     }
+
+
     return det_boards;
 }
 
@@ -146,6 +148,8 @@ double calculate_f1(int true_positives, int total_detections, int true_detection
     double precision = true_positives / (true_positives + false_positives);
     double false_negatives = true_detections - true_positives;
     double recall = true_positives / (true_positives + false_negatives);
+    printf("Precision: %f\tRecall: %f\t\n",precision,recall);
+
     return 2 * ((precision * recall) / (precision + recall));
 }
 

@@ -6,61 +6,23 @@
 
 #IncludeRegexTransform: 
 
-/Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/header/calculations.h
-stdio.h
--
-opencv2/opencv.hpp
--
-
-/Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/header/hough.h
-stdio.h
--
-opencv2/opencv.hpp
--
-
-/Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/header/load_darts.h
-stdio.h
--
-opencv2/opencv.hpp
--
-
-/Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/header/load_faces.h
-stdio.h
--
-opencv2/opencv.hpp
--
-
-/Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/header/main.h
-iostream
--
-stdio.h
--
-opencv2/opencv.hpp
--
-opencv2/core/core.hpp
--
-opencv2/highgui/highgui.hpp
--
-opencv2/imgproc.hpp
--
-opencv2/objdetect/objdetect.hpp
--
-
-/Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/main.cpp
-iostream
--
-opencv2/opencv.hpp
--
-header/main.h
-/Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/header/main.h
-header/load_faces.h
-/Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/header/load_faces.h
-header/load_darts.h
-/Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/header/load_darts.h
+/Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/calculations.cpp
 header/calculations.h
 /Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/header/calculations.h
 header/hough.h
 /Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/header/hough.h
+
+/Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/header/calculations.h
+stdio.h
+-
+opencv2/opencv.hpp
+-
+
+/Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/header/hough.h
+stdio.h
+-
+opencv2/opencv.hpp
+-
 
 /usr/local/include/opencv/cxcore.h
 opencv2/core/core_c.h
@@ -137,10 +99,6 @@ opencv2/core/check.hpp
 /usr/local/include/opencv2/core/check.hpp
 opencv2/core/base.hpp
 -
-
-/usr/local/include/opencv2/core/core.hpp
-opencv2/core.hpp
-/usr/local/include/opencv2/core/opencv2/core.hpp
 
 /usr/local/include/opencv2/core/core_c.h
 opencv2/core/types_c.h
@@ -894,10 +852,6 @@ opencv2/videoio.hpp
 opencv2/highgui/highgui_c.h
 /usr/local/include/opencv2/opencv2/highgui/highgui_c.h
 
-/usr/local/include/opencv2/highgui/highgui.hpp
-opencv2/highgui.hpp
-/usr/local/include/opencv2/highgui/opencv2/highgui.hpp
-
 /usr/local/include/opencv2/highgui/highgui_c.h
 opencv2/core/core_c.h
 /usr/local/include/opencv2/highgui/opencv2/core/core_c.h
@@ -957,10 +911,6 @@ opencv2/core.hpp
 -
 vector
 -
-
-/usr/local/include/opencv2/objdetect/objdetect.hpp
-opencv2/objdetect.hpp
-/usr/local/include/opencv2/objdetect/opencv2/objdetect.hpp
 
 /usr/local/include/opencv2/objdetect/objdetect_c.h
 opencv2/core/core_c.h
