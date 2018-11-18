@@ -17,7 +17,6 @@ String cascade_dart_name = "../training_data/stage3/cascade.xml";
 CascadeClassifier cascade;
 
 
-
 /** @function main */
 int main(int argc, char **argv) {
 
@@ -44,13 +43,13 @@ int main(int argc, char **argv) {
     //task_one_b();
     //task_two();
     //task_one_b();
-    task_two_b();
-
+//    task_two_b();
+    task_three(imageName);
     return 0;
 }
 
 
-void task_three(char *imageName){
+void task_three(char *imageName) {
 
     Mat image = imread(imageName);
     CascadeClassifier model;
@@ -67,25 +66,15 @@ void task_three(char *imageName){
         return;
     }
 
-
     vector<Rect> detected_dartboards = detect_dartboards(image, model);
 
-
-
-
-
-//    vector<Rect> detected_dartboards = hough_circle(image, 13, 40, 80);
-
-    /// Draw and show the detected rects
-    for (Rect circ: detected_dartboards){
+    // Draw and show the detected rects
+    for (const Rect &circ: detected_dartboards) {
         rectangle(img, circ, Scalar(0, 255, 0), 2);
     }
     img.convertTo(img, CV_32F);
-    display("img", img);
-
+    display("output", img);
 }
-
-
 
 
 void task_two() {
@@ -150,7 +139,7 @@ void task_one_a() {
 }
 
 
-void get_dataset_f1(){
+void get_dataset_f1() {
 
 }
 
@@ -189,7 +178,7 @@ void task_one_b() {
 }
 
 /** Test the dartboard detector on all example images **/
-void task_two_b(){
+void task_two_b() {
     vector<Mat> frames;
     vector<vector<Rect>> rects;
     vector<int> tpr;
@@ -211,14 +200,15 @@ void task_two_b(){
     }
 
     // detect all rects
-    for (Mat m : frames){
+    for (Mat m : frames) {
         rects.emplace_back(detect(m, cascade));
     }
 
-    for (int i = 0; i < 16; i++){
-        for (int j = 0; j < rects[i].size(); j++){
+    for (int i = 0; i < 16; i++) {
+        for (int j = 0; j < rects[i].size(); j++) {
             rectangle(frames[i], Point(rects[i][j].x, rects[i][j].y),
-                      Point(rects[i][j].x + rects[i][j].width, rects[i][j].y + rects[i][j].height), Scalar(0, 255, 0), 2);
+                      Point(rects[i][j].x + rects[i][j].width, rects[i][j].y + rects[i][j].height), Scalar(0, 255, 0),
+                      2);
 
         }
         imshow("frames", frames[i]);
@@ -227,13 +217,13 @@ void task_two_b(){
     }
 
     // calculate tpr
-    for (int i = 0; i < 16; i++){
+    for (int i = 0; i < 16; i++) {
         tpr.emplace_back(calculate_tpr(true_labels.at(i), rects.at(i), frames.at(i)));
     }
 
     // calculate f1 score for each
-    for (int i = 0; i < 16; i++){
-        f1_scores.emplace_back(calculate_f1(tpr.at(i),rects.at(i).size(),true_labels.at(i).size()));
+    for (int i = 0; i < 16; i++) {
+        f1_scores.emplace_back(calculate_f1(tpr.at(i), rects.at(i).size(), true_labels.at(i).size()));
         cout << "f1_score: " << f1_scores.at(i) << endl;
     }
 }

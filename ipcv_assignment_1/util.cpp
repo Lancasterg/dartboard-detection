@@ -18,11 +18,12 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
 
         Mat sub = src(rows, cols).clone();
 
-        imshow("a", sub);
+        imshow("aaa", sub);
         waitKey(0);
 
         // detect lines in a sub-region
-        vector<Vec2f> lines = hough_line(sub, 60, 10);
+        // TODO param adaptive
+        vector<Vec2f> lines = hough_line(sub, it->width / 2.5, 15);
 
         if (lines.size() < MIN_LINES) { // only one line detected, it's not a dartboard
             continue;
@@ -35,7 +36,7 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
             float rho1 = lineIt1->val[0];
             float theta1 = lineIt1->val[1];
 
-            printf("line rho1 %f  theta1 %f\n", rho1, theta1);
+//            printf("line rho1 %f  theta1 %f\n", rho1, theta1);
 
             Point2f o1, p1;
             float a = cos(theta1), b = sin(theta1);
@@ -49,7 +50,7 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
                 float rho2 = lineIt2->val[0];
                 float theta2 = lineIt2->val[1];
 
-                printf("line rho2 %f  theta2 %f\n", rho2, theta2);
+//                printf("line rho2 %f  theta2 %f\n", rho2, theta2);
 
                 // exclude self
                 if (fabs(rho1 - rho2) < 1e-4 && fabs(theta1 - theta2) < 1e-4) {
@@ -71,7 +72,9 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
                 if (abs(cross) > 1e-8) {
                     double t1 = (x.x * d2.y - x.y * d2.x) / cross;
                     Point2f r = o1 + d1 * t1;
-                    intersections.insert(intersections.end(), r);
+                    if (r.x > 0 && r.x < sub.cols && r.y > 0 && r.y < sub.rows) {
+                        intersections.insert(intersections.end(), r);
+                    }
                 }
             }
         }
@@ -81,10 +84,10 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
         }
 
         Rect2f center;
-        center.x = (float) sub.cols * 4 / 10;
-        center.y = (float) sub.rows * 4 / 10;
-        center.width = (float) sub.cols * 2 / 10;
-        center.height = (float) sub.rows * 2 / 10;
+        center.x = (float) sub.cols * 3 / 10;
+        center.y = (float) sub.rows * 3 / 10;
+        center.width = (float) sub.cols * 4 / 10;
+        center.height = (float) sub.rows * 4 / 10;
 
         int numInCenter = 0;
 
@@ -102,7 +105,7 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
             }
         }
 
-        printf("number in center %d total intersections %d percentage %.2f", numInCenter, intersections.size(),
+        printf("number in center %d total intersections %d percentage %.2f\n", numInCenter, intersections.size(),
                float(numInCenter) / intersections.size() * 100);
 
         if (float(numInCenter) / intersections.size() > LIMIT_PERCENTAGE_OF_POINTS) {

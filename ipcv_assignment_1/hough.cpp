@@ -56,6 +56,18 @@ int ***allocate3DArray(int x, int y, int z) {
     return the_array;
 }
 
+int **allocate2DArray(int x, int y) {
+    int **the_array = new int *[x];
+    for (int i(0); i < x; ++i) {
+        the_array[i] = new int[y];
+
+        for (int j(0); j < y; ++j) {
+            the_array[i][j] = 0;
+        }
+    }
+    return the_array;
+}
+
 void display(const string &name, const Mat src) {
     cv::Mat dst = src.clone();
     normalize(dst, dst, 0, 1, NORM_MINMAX);
@@ -185,7 +197,7 @@ vector<Rect> hough_circle(const Mat &src, int threshold, int minRadius, int maxR
                 if (vote[x][y][r] > threshold) {
                     // printf("%d %d %d %d \n", x, y, r, vote[x][y][r]);
                     Point center(y, x);
-                    circle(src, center, r, Scalar(255, 0, 0));
+//                    circle(src, center, r, Scalar(255, 0, 0));
                     circles.insert(circles.end(), Vec3f(x, y, r));
                     circle(blank, center, r, Scalar(255, 0, 0), -1);
                 }
@@ -243,7 +255,9 @@ vector<Vec2f> hough_line(const Mat &src, int threshold, int delta) {
 
     int diag = (int) floor(sqrt(magn.rows * magn.rows + magn.cols * magn.cols));
 
-    Mat hough_space(diag, 361, CV_32S);
+//    Mat hough_space(diag, 361, CV_32S);
+
+    int **votes = allocate2DArray(diag, 361);
 
     for (int i = 0; i < magn.rows; i++) {
         for (int j = 0; j < magn.cols; j++) {
@@ -256,7 +270,8 @@ vector<Vec2f> hough_line(const Mat &src, int threshold, int delta) {
                     float theta = thetaDegree * (float) M_PI / 180;
                     int rho = (int) (i * sin(theta) + j * cos(theta));
                     if (rho >= 0 && rho < diag && thetaDegree >= 0 && thetaDegree <= 360) {
-                        hough_space.at<int>(rho, thetaDegree) += 1;
+//                        hough_space.at<int>(rho, thetaDegree) += 1;
+                        votes[rho][thetaDegree] += 1;
                     }
                 }
             }
@@ -264,9 +279,9 @@ vector<Vec2f> hough_line(const Mat &src, int threshold, int delta) {
     }
 
     vector<Vec2f> lines;
-    for (int rho = 0; rho < hough_space.rows; rho++) {
-        for (int thetaDegree = 0; thetaDegree < hough_space.cols; thetaDegree++) {
-            if (hough_space.at<int>(rho, thetaDegree) > threshold) {
+    for (int rho = 0; rho < diag; rho++) {
+        for (int thetaDegree = 0; thetaDegree < 361; thetaDegree++) {
+            if (votes[rho][thetaDegree] > threshold) {
                 Point pt1, pt2;
                 double theta = thetaDegree * M_PI / 180;
                 double a = cos(theta), b = sin(theta);
@@ -283,8 +298,8 @@ vector<Vec2f> hough_line(const Mat &src, int threshold, int delta) {
         }
     }
 
-//    imshow("detected lines", src);
-//    waitKey(0);
+    imshow("detected lines", src);
+    waitKey(0);
 
     return lines;
 }
@@ -333,8 +348,8 @@ Mat gradDirection(Mat input) {
 
     int depth = 1;
 
-    Mat dx(input.rows, input.cols, CV_32F);
-    Mat dy(input.rows, input.cols, CV_32F);
+//    Mat dx(input.rows, input.cols, CV_32F);
+//    Mat dy(input.rows, input.cols, CV_32F);
 
     // now we can do the convolution
     for (int i = 0; i < input.rows; i++) {
@@ -352,8 +367,8 @@ Mat gradDirection(Mat input) {
                     }
                 }
 
-                dx.at<float>(i, j) = sumX;
-                dy.at<float>(i, j) = sumY;
+//                dx.at<float>(i, j) = sumX;
+//                dy.at<float>(i, j) = sumY;
                 result.at<float>(i, j) = atan2(sumY, sumX);
             }
         }

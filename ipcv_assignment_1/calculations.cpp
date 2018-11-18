@@ -5,29 +5,27 @@
 #include "header/hough.h"
 #include "header/util.h"
 
-
-
-vector<Rect> detect_dartboards(Mat image, CascadeClassifier model){
+vector<Rect> detect_dartboards(Mat image, CascadeClassifier model) {
     vector<Rect> ret;
     vector<Rect> circles = hough_circle(image, 12, 40, 80);
     vector<Rect> boards;
     vector<Rect> det_boards;
 
 
-    if(circles.size() != 0){
-        for (Rect r : circles){
+    if (circles.size() != 0) {
+        for (Rect r : circles) {
             Mat roi = Mat(image, r);
             model.detectMultiScale(roi, boards, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(50, 50), Size(500, 500));
-            if (boards.size() != 0){ // if a detection has been made
-                Rect rect(boards[0].x + r.x, boards[0].y + r.y,boards[0].width, boards[0].height);
+            if (boards.size() != 0) { // if a detection has been made
+                Rect rect(boards[0].x + r.x, boards[0].y + r.y, boards[0].width, boards[0].height);
                 det_boards.emplace_back(rect);
             }
 
         }
-    }else{  // circles is empty
+    } else {  // circles is empty
         model.detectMultiScale(image, det_boards, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(50, 50), Size(500, 500));
     }
-    if(det_boards.size() == 0){
+    if (det_boards.size() == 0) {
         model.detectMultiScale(image, det_boards, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(50, 50), Size(500, 500));
     }
 
@@ -38,11 +36,10 @@ vector<Rect> detect_dartboards(Mat image, CascadeClassifier model){
 }
 
 
-
 /**
  * Calculate total f1 score for a data set
  */
-double calculate_total_f1(vector<Mat> images, vector<vector<Rect>> ground_truth, CascadeClassifier model){
+double calculate_total_f1(vector<Mat> images, vector<vector<Rect>> ground_truth, CascadeClassifier model) {
 
     // calculate the total tpr
     vector<vector<Rect>> detections;
@@ -50,18 +47,18 @@ double calculate_total_f1(vector<Mat> images, vector<vector<Rect>> ground_truth,
     int total_detections = 0;
     int total_truth = 0;
 
-    for (int i = 0; i < images.size(); i++){
+    for (int i = 0; i < images.size(); i++) {
         detections.emplace_back(detect(images[i], model));
         tpr += calculate_tpr(ground_truth[i], detections[i], images[i]);
     }
 
     // calculate total detections
-    for (vector<Rect> detection : detections){
+    for (vector<Rect> detection : detections) {
         total_detections += detection.size();
     }
 
     // calculate ground truth
-    for (vector<Rect> truth : ground_truth){
+    for (vector<Rect> truth : ground_truth) {
         total_truth += truth.size();
     }
 
@@ -85,7 +82,6 @@ int overlap(Rect a, Rect b) {
     }
     return 1;
 }
-
 
 
 /**
@@ -114,7 +110,7 @@ int calculate_tpr(vector<Rect> ground_truth, vector<Rect> detections, Mat image)
                 double overlap_percent = (overlap / rect_a.area()) * 100;
 
                 // if overlap is greater than 50%, add to correct detections
-                if (overlap_percent >= 10){
+                if (overlap_percent >= 10) {
                     // && rect_b.area() <= 2 * rect_a.area()) {
                     correct_detections.emplace_back(rect_b);
                     break;
