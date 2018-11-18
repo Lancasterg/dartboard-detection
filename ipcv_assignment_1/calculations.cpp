@@ -3,6 +3,7 @@
 //
 #include "header/calculations.h"
 #include "header/hough.h"
+#include "header/util.h"
 
 
 
@@ -29,7 +30,11 @@ vector<Rect> detect_dartboards(Mat image, CascadeClassifier model){
     if(det_boards.size() == 0){
         model.detectMultiScale(image, det_boards, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(50, 50), Size(500, 500));
     }
-    return det_boards;
+
+    // filter by line intersection
+    vector<Rect> finalResult = line_intersection(image, det_boards);
+
+    return finalResult;
 }
 
 

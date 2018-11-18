@@ -65,8 +65,7 @@ void display(const string &name, const Mat src) {
 }
 
 
-
-vector<Vec3f>getCircleAreas(vector<Vec3f> circles, Mat image, int minRadius, int maxRadius){
+vector<Vec3f> getCircleAreas(vector<Vec3f> circles, Mat image, int minRadius, int maxRadius) {
     vector<Vec3f> det_circles;
     vector<vector<Point> > contours;
     vector<Vec4i> hierarchy;
@@ -75,8 +74,8 @@ vector<Vec3f>getCircleAreas(vector<Vec3f> circles, Mat image, int minRadius, int
     /// Find circles in image
     Mat blank = cv::Mat::zeros(cv::Size(image.cols, image.rows), CV_8UC1);
 
-    for (Vec3f circ: circles){
-        printf("%f,%f,%f\n",circ[0], circ[1], circ[2]);
+    for (Vec3f circ: circles) {
+        printf("%f,%f,%f\n", circ[0], circ[1], circ[2]);
         int x = (int) circ.val[0];
         int y = (int) circ.val[1];
         int r = (int) circ.val[2];
@@ -85,7 +84,6 @@ vector<Vec3f>getCircleAreas(vector<Vec3f> circles, Mat image, int minRadius, int
 
 
     display("image", blank);
-
 
 
     findContours(blank, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
@@ -110,10 +108,10 @@ vector<Vec3f>getCircleAreas(vector<Vec3f> circles, Mat image, int minRadius, int
         circle(drawing, mc[i], 4, color, -1, 8, 0);
     }
 
-    display("image",drawing);
+    display("image", drawing);
 
 
-    blank.convertTo(blank,CV_32F);
+    blank.convertTo(blank, CV_32F);
 
     return det_circles;
 }
@@ -128,13 +126,13 @@ vector<Rect> hough_circle(const Mat &src, int threshold, int minRadius, int maxR
     GaussianBlur(image, blur_img, Size(5, 5), 0, 0);
 
     Mat magn = gradMagnitude(blur_img);
-    display("gradient magnitude", magn);
+//    display("gradient magnitude", magn);
 
     thresholdMag(magn, 120);
-    display("threshold magnitude", magn);
+//    display("threshold magnitude", magn);
 
     Mat dir = gradDirection(blur_img);
-    display("gradient direction", dir);
+//    display("gradient direction", dir);
 
     int ***vote = allocate3DArray(magn.rows, magn.cols, maxRadius);
 
@@ -222,7 +220,6 @@ vector<Rect> hough_circle(const Mat &src, int threshold, int minRadius, int maxR
     }
 
 
-
     return det_circles;
 }
 
@@ -236,17 +233,17 @@ vector<Vec2f> hough_line(const Mat &src, int threshold, int delta) {
     GaussianBlur(image, blur_img, Size(5, 5), 0, 0);
 
     Mat magn = gradMagnitude(blur_img);
-    display("gradient magnitude", magn);
+//    display("gradient magnitude", magn);
 
     thresholdMag(magn, 120);
-    display("threshold magnitude", magn);
+//    display("threshold magnitude", magn);
 
     Mat dir = gradDirection(blur_img);
-    display("gradient direction", dir);
+//    display("gradient direction", dir);
 
     int diag = (int) floor(sqrt(magn.rows * magn.rows + magn.cols * magn.cols));
 
-    Mat hough_space(diag, 361, CV_32F);
+    Mat hough_space(diag, 361, CV_32S);
 
     for (int i = 0; i < magn.rows; i++) {
         for (int j = 0; j < magn.cols; j++) {
@@ -259,7 +256,7 @@ vector<Vec2f> hough_line(const Mat &src, int threshold, int delta) {
                     float theta = thetaDegree * (float) M_PI / 180;
                     int rho = (int) (i * sin(theta) + j * cos(theta));
                     if (rho >= 0 && rho < diag && thetaDegree >= 0 && thetaDegree <= 360) {
-                        hough_space.at<float>(rho, thetaDegree) += 1;
+                        hough_space.at<int>(rho, thetaDegree) += 1;
                     }
                 }
             }
@@ -269,7 +266,7 @@ vector<Vec2f> hough_line(const Mat &src, int threshold, int delta) {
     vector<Vec2f> lines;
     for (int rho = 0; rho < hough_space.rows; rho++) {
         for (int thetaDegree = 0; thetaDegree < hough_space.cols; thetaDegree++) {
-            if (hough_space.at<float>(rho, thetaDegree) > threshold) {
+            if (hough_space.at<int>(rho, thetaDegree) > threshold) {
                 Point pt1, pt2;
                 double theta = thetaDegree * M_PI / 180;
                 double a = cos(theta), b = sin(theta);
@@ -281,13 +278,13 @@ vector<Vec2f> hough_line(const Mat &src, int threshold, int delta) {
                 line(src, pt1, pt2, Scalar(0, 0, 255), 1, CV_AA);
 
                 lines.insert(lines.end(), Vec2f(rho, (float) theta));
-//                printf("%d %d %.2f\n", rho, thetaDegree, hough_space.at<float>(rho, thetaDegree));
+//                printf("%d %d %d\n", rho, thetaDegree, hough_space.at<int>(rho, thetaDegree));
             }
         }
     }
 
-    imshow("detected lines", src);
-    waitKey(0);
+//    imshow("detected lines", src);
+//    waitKey(0);
 
     return lines;
 }
@@ -383,3 +380,19 @@ void thresholdMag(Mat &image, int threshold) {
     }
 }
 
+
+int main(int argc, char **argv) {
+    // LOADING THE IMAGE
+    char *imageName = argv[1];
+
+    Mat image = imread(imageName);
+
+    if (argc != 2 || !image.data) {
+        printf(" No image data \n ");
+        return -1;
+    }
+
+    hough_line(image, 80, 20);
+
+    return 0;
+}
