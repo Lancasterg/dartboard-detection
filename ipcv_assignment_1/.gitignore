@@ -32,3 +32,5 @@ bin/
 # MacOs Clion
 .DS_Store
 .idea/
+
+cmake-build-debug/

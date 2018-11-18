@@ -379,20 +379,3 @@ void thresholdMag(Mat &image, int threshold) {
         }
     }
 }
-
-
-int main(int argc, char **argv) {
-    // LOADING THE IMAGE
-    char *imageName = argv[1];
-
-    Mat image = imread(imageName);
-
-    if (argc != 2 || !image.data) {
-        printf(" No image data \n ");
-        return -1;
-    }
-
-    hough_line(image, 80, 20);
-
-    return 0;
-}
