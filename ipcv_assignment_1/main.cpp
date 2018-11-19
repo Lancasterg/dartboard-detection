@@ -5,6 +5,7 @@
 #include "header/load_darts.h"
 #include "header/calculations.h"
 #include "header/hough.h"
+#include "header/util.h"
 
 /** Namespace declaration **/
 using namespace std;
@@ -17,12 +18,18 @@ String cascade_dart_name = "../training_data/stage3/cascade.xml";
 CascadeClassifier cascade;
 
 void test_detector();
+void task_four(char *imageName);
 
 /** @function main */
 int main(int argc, char **argv) {
 
     char *imageName = argv[1];
-    //task_three(imageName);
+
+//    task_four(imageName);
+//    task_three(imageName);
+
+
+
 
      test_detector();
 
@@ -100,6 +107,33 @@ void test_detector(){
 
         printf("darts%d f1_score: %f\n",i, f1_scores[i]);
     }
+
+}
+
+void task_four(char *imageName){
+    Mat image = imread(imageName);
+    Mat img = imread(imageName);
+    CascadeClassifier model;
+    // 1. Load the Strong Classifier in a structure called `model'
+    if (!model.load(cascade_dart_name)) {
+        printf("--(!)Error loading\n");
+        return;
+    };
+    if (image.empty()) {
+        cout << "can not open " << imageName << endl;
+        return;
+    }
+    vector<Rect> detected_dartboards = sliding_window_classification(image, model);
+
+    // Draw and show the detected rects
+    for (const Rect &circ: detected_dartboards) {
+        rectangle(img, circ, Scalar(0, 255, 0), 2);
+    }
+    img.convertTo(img, CV_32F);
+    display("output", img);
+
+
+
 
 }
 
@@ -232,7 +266,6 @@ void task_one_b() {
 
     cout << "darts15 tpr: " << darts15tpr << endl;
     cout << "darts 15 f1 score: " << f1_15 << endl;
-
 }
 
 /** Test the dartboard detector on all example images **/
