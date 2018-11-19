@@ -99,9 +99,9 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.12/Modules/Platform/UnixPaths.cmake"
   "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.12/Modules/ProcessorCount.cmake"
   "../CMakeLists.txt"
-  "CMakeFiles/3.12.2/CMakeCCompiler.cmake"
-  "CMakeFiles/3.12.2/CMakeCXXCompiler.cmake"
-  "CMakeFiles/3.12.2/CMakeSystem.cmake"
+  "CMakeFiles/3.12.3/CMakeCCompiler.cmake"
+  "CMakeFiles/3.12.3/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.12.3/CMakeSystem.cmake"
   "CMakeFiles/feature_tests.c"
   "CMakeFiles/feature_tests.cxx"
   "/usr/local/share/OpenCV/OpenCVConfig-version.cmake"
@@ -118,11 +118,11 @@ set(CMAKE_MAKEFILE_OUTPUTS
 
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
-  "CMakeFiles/3.12.2/CMakeSystem.cmake"
-  "CMakeFiles/3.12.2/CMakeCCompiler.cmake"
-  "CMakeFiles/3.12.2/CMakeCXXCompiler.cmake"
-  "CMakeFiles/3.12.2/CMakeCCompiler.cmake"
-  "CMakeFiles/3.12.2/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.12.3/CMakeSystem.cmake"
+  "CMakeFiles/3.12.3/CMakeCCompiler.cmake"
+  "CMakeFiles/3.12.3/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.12.3/CMakeCCompiler.cmake"
+  "CMakeFiles/3.12.3/CMakeCXXCompiler.cmake"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
