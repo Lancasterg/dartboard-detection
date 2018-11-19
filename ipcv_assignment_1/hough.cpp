@@ -68,7 +68,7 @@ int **allocate2DArray(int x, int y) {
     return the_array;
 }
 
-void display(const string &name, const Mat src) {
+void display(const string &name, const Mat &src) {
     cv::Mat dst = src.clone();
     normalize(dst, dst, 0, 1, NORM_MINMAX);
     imshow(name, dst);
@@ -76,59 +76,7 @@ void display(const string &name, const Mat src) {
     dst.release();
 }
 
-
-vector<Vec3f> getCircleAreas(vector<Vec3f> circles, Mat image, int minRadius, int maxRadius) {
-    vector<Vec3f> det_circles;
-    vector<vector<Point> > contours;
-    vector<Vec4i> hierarchy;
-
-
-    /// Find circles in image
-    Mat blank = cv::Mat::zeros(cv::Size(image.cols, image.rows), CV_8UC1);
-
-    for (Vec3f circ: circles) {
-        printf("%f,%f,%f\n", circ[0], circ[1], circ[2]);
-        int x = (int) circ.val[0];
-        int y = (int) circ.val[1];
-        int r = (int) circ.val[2];
-        circle(blank, Point(y, x), r, Scalar(255, 0, 0), -1);
-    }
-
-
-//    display("image", blank);
-
-
-    findContours(blank, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
-
-    // get the moments
-    vector<Moments> mu(contours.size());
-    for (int i = 0; i < contours.size(); i++) {
-        mu[i] = moments(contours[i], false);
-    }
-
-    // get the centroid of figures.
-    vector<Point2f> mc(contours.size());
-    for (int i = 0; i < contours.size(); i++) {
-        mc[i] = Point2f(mu[i].m10 / mu[i].m00, mu[i].m01 / mu[i].m00);
-    }
-
-    // draw contours
-    Mat drawing(blank.size(), CV_8UC3, Scalar(255, 255, 255));
-    for (int i = 0; i < contours.size(); i++) {
-        Scalar color = Scalar(255, 0, 0); // B G R values
-        drawContours(drawing, contours, i, color, 2, 8, hierarchy, 0, Point());
-        circle(drawing, mc[i], 4, color, -1, 8, 0);
-    }
-
-//    display("image", drawing);
-
-
-    blank.convertTo(blank, CV_32F);
-
-    return det_circles;
-}
-
-vector<Rect> hough_circle(const Mat &src, int threshold, int minRadius, int maxRadius) {
+vector<Vec3f> hough_circle(const Mat &src, int threshold, int minRadius, int maxRadius) {
     Mat gray_image;
     cvtColor(src, gray_image, CV_BGR2GRAY);
 
@@ -181,60 +129,25 @@ vector<Rect> hough_circle(const Mat &src, int threshold, int minRadius, int maxR
     }
 //    display("hough space", hough_space);
 
-
-
-    /// detect the areas of concentrated circles
-    vector<Rect> det_circles;
-    vector<vector<Point> > contours;
-    vector<Vec4i> hierarchy;
-    Mat blank = cv::Mat::zeros(cv::Size(image.cols, image.rows), CV_8UC1);
     vector<Vec3f> circles;
-
 
     for (int x = 0; x < magn.rows; x++) {
         for (int y = 0; y < magn.cols; y++) {
             for (int r = minRadius; r < maxRadius; r++) {
                 if (vote[x][y][r] > threshold) {
-                    // printf("%d %d %d %d \n", x, y, r, vote[x][y][r]);
-                    Point center(y, x);
-//                    circle(src, center, r, Scalar(255, 0, 0));
                     circles.insert(circles.end(), Vec3f(x, y, r));
-                    circle(blank, center, r, Scalar(255, 0, 0), -1);
+//                    Point center(y, x);
+//                    printf("%d %d %d %d \n", x, y, r, vote[x][y][r]);
+//                    circle(src, center, r, Scalar(255, 0, 0));
                 }
             }
         }
     }
 
-
-
-    // find the connected components
-    findContours(blank, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
-
-    // get the moments from the contours
-    vector<Moments> mu(contours.size());
-    for (int i = 0; i < contours.size(); i++) {
-        mu[i] = moments(contours[i], false);
-    }
-
-    // get the centroid
-    vector<Point2f> centers(contours.size());
-    for (int i = 0; i < contours.size(); i++) {
-        centers[i] = Point2f(mu[i].m10 / mu[i].m00, mu[i].m01 / mu[i].m00);
-    }
-
-    // draw contours
-    Mat drawing(blank.size(), CV_8UC3, Scalar(255, 255, 255));
-    for (int i = 0; i < contours.size(); i++) {
-        Scalar color = Scalar(255, 0, 0); // B G R values
-        drawContours(image, contours, i, color, 2, 8, hierarchy, 0, Point());
-        circle(image, centers[i], 4, color, -1, 8, 0);
-        det_circles.emplace_back(boundingRect(contours[i]));
-    }
-
 //    imshow("detected circles", src);
 //    waitKey(0);
 
-    return det_circles;
+    return circles;
 }
 
 vector<Vec2f> hough_line(const Mat &src, float threshold, int delta) {
@@ -257,8 +170,6 @@ vector<Vec2f> hough_line(const Mat &src, float threshold, int delta) {
 
     int diag = (int) floor(sqrt(magn.rows * magn.rows + magn.cols * magn.cols));
 
-//    Mat hough_space(diag, 361, CV_32S);
-
     int **votes = allocate2DArray(diag, 361);
 
     for (int i = 0; i < magn.rows; i++) {
@@ -272,7 +183,6 @@ vector<Vec2f> hough_line(const Mat &src, float threshold, int delta) {
                     float theta = thetaDegree * (float) M_PI / 180;
                     int rho = (int) (i * sin(theta) + j * cos(theta));
                     if (rho >= 0 && rho < diag && thetaDegree >= 0 && thetaDegree <= 360) {
-//                        hough_space.at<int>(rho, thetaDegree) += 1;
                         votes[rho][thetaDegree] += 1;
                     }
                 }
