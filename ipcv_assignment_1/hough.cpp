@@ -235,7 +235,7 @@ vector<Rect> hough_circle(const Mat &src, int threshold, int minRadius, int maxR
     return det_circles;
 }
 
-vector<Vec2f> hough_line(const Mat &src, float threshold, int delta) {
+vector<Vec2f> hough_line(const Mat &src, int threshold, int delta) {
     Mat gray_image;
     cvtColor(src, gray_image, CV_BGR2GRAY);
 

@@ -17,7 +17,7 @@ Mat getXKernel();
 
 int ***allocate3DArray(int x, int y, int z);
 
-vector<Vec2f> hough_line(const Mat &src, float threshold, int delta);
+vector<Vec2f> hough_line(const Mat &src, int threshold, int delta);
 
 vector<Rect> hough_circle(const Mat &src, int threshold, int minRadius, int maxRadius);
 
