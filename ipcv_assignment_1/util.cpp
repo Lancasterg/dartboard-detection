@@ -64,7 +64,7 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
 //        waitKey(0);
 
         // detect lines in a sub-region
-        vector<Vec2f> lines = hough_line(sub, it->width / 2.5, 15);
+        vector<Vec2f> lines = hough_line(sub, it->width / 2.33, 12);
 
         if (lines.size() < MIN_LINES) { // only one line detected, it's not a dartboard
             continue;
