@@ -8,6 +8,7 @@
 #define MIN_LINES 1
 
 vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles);
+vector<Rect> concentric_intersection(const Mat &src);
 vector<Rect> sliding_window_classification(Mat &src, CascadeClassifier model);
 
 

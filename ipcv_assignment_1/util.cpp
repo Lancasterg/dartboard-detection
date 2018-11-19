@@ -73,9 +73,8 @@ vector<Vec2f> getCentral(Mat sub, vector<Vec2f> lines) {
     return centralLines;
 }
 
-bool diverseDegree(Mat sub, vector<Vec2f> lines) {
+bool diverseDegree(vector<Vec2f> lines) {
     float totalDifference = 0;
-
     int n = 0;
     for (Vec2f line : lines) {
         for (Vec2f l : lines) {
@@ -114,7 +113,7 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
 
         vector<Vec2f> centralLines = getCentral(sub, lines);
 
-        if (!diverseDegree(sub, centralLines)) {
+        if (!diverseDegree(centralLines)) {
             cout << "degree difference too small" << endl;
             continue;
         }
@@ -212,4 +211,44 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
     printf("result size %d\n", result.size());
 
     return result;
+}
+
+vector<Rect> concentric_intersection(const Mat &image) {
+    vector<Vec3f> circles = hough_circle(image, 12, 40, 80);
+
+    vector<Rect> det_circles;
+    vector<vector<Point> > contours;
+    vector<Vec4i> hierarchy;
+    Mat blank = cv::Mat::zeros(cv::Size(image.cols, image.rows), CV_8UC1);
+
+    for (Vec3f c : circles) {
+        Point center(c.val[1], c.val[0]);
+        circle(blank, center, c.val[2], Scalar(255, 0, 0), -1);
+    }
+
+    // find the connected components
+    findContours(blank, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
+
+    // get the moments from the contours
+    vector<Moments> mu(contours.size());
+    for (int i = 0; i < contours.size(); i++) {
+        mu[i] = moments(contours[i], false);
+    }
+
+    // get the centroid
+    vector<Point2f> centers(contours.size());
+    for (int i = 0; i < contours.size(); i++) {
+        centers[i] = Point2f(mu[i].m10 / mu[i].m00, mu[i].m01 / mu[i].m00);
+    }
+
+    // draw contours
+    Mat drawing(blank.size(), CV_8UC3, Scalar(255, 255, 255));
+    for (int i = 0; i < contours.size(); i++) {
+        Scalar color = Scalar(255, 0, 0); // B G R values
+//        drawContours(image, contours, i, color, 2, 8, hierarchy, 0, Point());
+//        circle(image, centers[i], 4, color, -1, 8, 0);
+        det_circles.emplace_back(boundingRect(contours[i]));
+    }
+
+    return det_circles;
 }

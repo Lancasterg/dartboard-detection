@@ -44,12 +44,12 @@ vector<Rect> exlude_intersect(vector<Rect> boards) {
 
 vector<Rect> detect_dartboards(Mat image, CascadeClassifier model) {
     vector<Rect> ret;
-    vector<Rect> circles = hough_circle(image, 12, 40, 80);
+    vector<Rect> circles = concentric_intersection(image);
     vector<Rect> boards;
     vector<Rect> det_boards;
 
 
-    if (circles.size() != 0) {
+    if (!circles.empty()) {
         for (Rect r : circles) {
             Mat roi = Mat(image, r);
 //            imshow("roi", roi);
