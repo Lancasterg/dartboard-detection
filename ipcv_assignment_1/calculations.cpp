@@ -15,9 +15,31 @@ vector<Rect> detect_dartboards(Mat image, CascadeClassifier model) {
     if (circles.size() != 0) {
         for (Rect r : circles) {
             Mat roi = Mat(image, r);
+//            imshow("roi", roi);
+//            waitKey(0);
             model.detectMultiScale(roi, boards, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(50, 50), Size(500, 500));
             if (boards.size() != 0) { // if a detection has been made
-                Rect rect(boards[0].x-10 + r.x, boards[0].y + r.y -10, boards[0].width+10, boards[0].height+10);
+
+                // find average rect area
+                int avg_x = 0;
+                int avg_y = 0;
+                int avg_height = 0;
+                int avg_width = 0;
+                for (Rect b : boards){
+                    avg_x += b.x;
+                    avg_y += b.y;
+                    avg_height += b.height;
+                    avg_width += b. width;
+                }
+                avg_x /= boards.size();
+                avg_y /= boards.size();
+                avg_height /= boards.size();
+                avg_width /= boards.size();
+
+                // add the rects together
+
+
+                Rect rect(avg_x -10 + r.x, avg_y + r.y -10, avg_width+10, avg_height+10);
                 det_boards.emplace_back(rect);
             }
 

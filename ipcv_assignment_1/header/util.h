@@ -8,6 +8,8 @@
 #define MIN_LINES 5
 
 vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles);
+vector<Rect> sliding_window_classification(Mat &src, CascadeClassifier model);
+
 
 // TODO should move concentric circle detection here
 

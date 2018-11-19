@@ -5,6 +5,50 @@
 #include "header/hough.h"
 #include "header/util.h"
 
+vector<Rect> sliding_window_classification(Mat &src, CascadeClassifier model){
+    int min_window = 40;
+    int max_window = src.rows;
+    vector<Rect> ret;
+    vector<Rect> detections;
+//    for (int window_size = min_window; window_size < max_window; window_size++){
+//
+//        for (int i = 0; i < src.rows - window_size; i+= 0.5 * window_size){
+//            for (int j = 0; j < src.cols - window_size; j+= 0.5 * window_size){
+//
+//                vector<Rect> cur_det;
+//                Mat dst_roi;
+//                src(Rect(j,i,window_size, window_size)).copyTo(dst_roi);
+//                model.detectMultiScale(dst_roi, cur_det, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(min_window, min_window), Size(window_size, window_size));
+//
+//                if (cur_det.size() != 0) { // if a detection has been made
+//                    Rect rect(cur_det[0].x + src.rows, cur_det[0].y + src.cols, cur_det[0].width, cur_det[0].height);
+//                    detections.emplace_back(rect);
+//                }
+//            }
+//        }
+//    }
+
+//
+//
+//    model.detectMultiScale(src, detections, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(cur_window, cur_window), Size(cur_wind, 250));
+//
+//    for (Rect r: detections){
+//        rectangle( src, r, Scalar(255,0,0), 2, 8, 0 );
+//    }
+//    imshow("dst_roi", src);
+//    waitKey(0);
+
+    return ret;
+}
+
+
+
+
+
+
+
+
+
 vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
     printf("original rows %d cols %d\n", src.rows, src.cols);
 
