@@ -6,8 +6,6 @@
 #include "header/util.h"
 
 vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
-    printf("original rows %d cols %d\n", src.rows, src.cols);
-
     vector<Rect> result;
 
     for (vector<Rect>::iterator it = circles.begin(); it != circles.end(); it++) {
@@ -22,8 +20,7 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
 //        waitKey(0);
 
         // detect lines in a sub-region
-        // TODO param adaptive
-        vector<Vec2f> lines = hough_line(sub, it->width / 2.5, 15);
+        vector<Vec2f> lines = hough_line(sub, it->width / 2.6, 15);
 
         if (lines.size() < MIN_LINES) { // only one line detected, it's not a dartboard
             continue;
@@ -95,9 +92,9 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
         // check if most of points are located inside the center area of the image
         for (vector<Point2f>::iterator pointIt = intersections.begin();
              pointIt != intersections.end(); pointIt++) {
-             Point2f p = *pointIt;
+            Point2f p = *pointIt;
 
-            printf("inter x %.2f y %.2f\n", p.x, p.y);
+//            printf("inter x %.2f y %.2f\n", p.x, p.y);
 
             if (p.x > center.x && p.x < center.x + center.width && p.y > center.y &&
                 p.y < center.y + center.height) {
