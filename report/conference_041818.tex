@@ -125,7 +125,7 @@ The F1 score of the Viola-Jones classifier, when detecting faces in the test dat
 dart0.jpg			& 0.5	00	&	0.250	\\
 dart1.jpg			& 0		&	0.500	\\
 dart2.jpg			& 0.250	&	0.400	\\
-dart3.jpg			& 1.538	&	0.333	\\
+dart3.jpg			& 0.538	&	0.333	\\
 dart4.jpg			& 0.4	00	&	0.250	\\
 dart5.jpg			& 0.154	&	0.200	\\
 dart6.jpg			& 0.333	&	0.500	\\
@@ -145,6 +145,42 @@ Average f1 score 	& 0.276	&	0.336	\\ \hline
 \end{table}%
 \newpage
 \section{Integration with Shape Detectors}
+We used a circular hough transform in addition
+\begin{table}[htp]
+\caption{F1 scores for all images, when detecting for dartboards using a cascade classier trained on dartboards.}
+\begin{center}
+\begin{tabular}{||c|c|c|c||}
+\hline
+Image Name			 	& F1 Score 	& Precision	& Recall            \\ \hline
+dart0.jpg					& 1.000		&	1.000	& 1.000		\\
+dart1.jpg					& 1.000		&	1.000	& 1.000		\\
+dart2.jpg					& 1.000		&	1.000	& 1.000		\\
+dart3.jpg					& 0.333		&	0.200	& 1.000		\\
+dart4.jpg					& 1.000		&	1.000	& 1.000		\\
+dart5.jpg					& 1.000		&	1.000	& 1.000		\\
+dart6.jpg					& 1.000		&	1.000	& 1.000		\\
+dart7.jpg					& 1.000		&	1.000	& 1.000		\\
+dart8.jpg					& 1.000		&	1.000	& 1.000		\\
+dart9.jpg					& 0.000		&	0.000	& 0.000		\\
+dart10.jpg					& 1.000		&	1.000	& 1.000		\\
+dart11.jpg					& 0.222		&	0.125	& 1.000		\\
+dart12.jpg					& 0.667		&	0.500	& 1.000		\\
+dart13.jpg					& 1.000		&	1.000	& 1.000		\\
+dart14.jpg					& 0.500		&	0.333	& 1.000		\\
+dart15.jpg					& 0.667		&	0.500	& 1.000		\\ \hline
+
+
+
+Average 		 			& 0.774		&	0.729	& 0.938 		\\ \hline
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}%
+
+
+
+
+
 \newpage
 \section{Further Improvements}
 

@@ -16,6 +16,7 @@ String cascade_name = "../frontalface.xml";
 String cascade_dart_name = "../training_data/stage3/cascade.xml";
 CascadeClassifier cascade;
 
+void test_detector();
 
 /** @function main */
 int main(int argc, char **argv) {
@@ -23,7 +24,7 @@ int main(int argc, char **argv) {
     char *imageName = argv[1];
     //task_three(imageName);
 
-
+     test_detector();
 
 
 //    CascadeClassifier model;
@@ -44,9 +45,66 @@ int main(int argc, char **argv) {
     //task_two();
     //task_one_b();
 //    task_two_b();
-    task_three(imageName);
+//    task_three(imageName);
     return 0;
 }
+
+
+
+void test_detector(){
+    vector<Mat> frames;
+    vector<Mat> draw;
+    vector<vector<Rect>> rects;
+    vector<int> tpr;
+    vector<double> f1_scores;
+    vector<vector<Rect>> true_labels;
+    char input_str[18];
+    char output_str[18];
+
+    // 1. Load the Strong Classifier in a structure called `Cascade'
+    if (!cascade.load(cascade_dart_name)) {
+        printf("--(!)Error loading\n");
+        return;
+    };
+
+    true_labels = load_dart_labels();
+
+    for (int i = 0; i < 16; i++) {
+        sprintf(input_str, "../img/dart%d.jpg", i);
+        frames.emplace_back(imread(input_str));
+        draw.emplace_back(imread(input_str));
+    }
+
+    for (Mat frame : frames){
+        rects.emplace_back(detect_dartboards(frame, cascade));
+    }
+
+
+    for (int i = 0; i < 16; i++) {
+        sprintf(output_str, "../task_3_detected/dart%d.jpg", i);
+
+        for (int j = 0; j < rects[i].size(); j++){
+            rectangle(draw[i], rects[i][j], Scalar(0, 255, 0), 2);
+        }
+        imwrite(output_str, draw[i]);
+    }
+
+    // calculate tpr
+    for (int i = 0; i < 16; i++){
+        tpr.emplace_back(calculate_tpr(true_labels.at(i), rects.at(i), draw.at(i)));
+    }
+
+    // calculate f1 score for each
+    for (int i = 0; i < 16; i++){
+        f1_scores.emplace_back(calculate_f1(tpr.at(i),rects.at(i).size(),true_labels.at(i).size()));
+
+        printf("darts%d f1_score: %f\n",i, f1_scores[i]);
+    }
+
+}
+
+
+
 
 
 void task_three(char *imageName) {

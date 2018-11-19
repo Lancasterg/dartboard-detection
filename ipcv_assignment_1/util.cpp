@@ -18,8 +18,8 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
 
         Mat sub = src(rows, cols).clone();
 
-        imshow("aaa", sub);
-        waitKey(0);
+//        imshow("aaa", sub);
+//        waitKey(0);
 
         // detect lines in a sub-region
         // TODO param adaptive
@@ -95,7 +95,7 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
         // check if most of points are located inside the center area of the image
         for (vector<Point2f>::iterator pointIt = intersections.begin();
              pointIt != intersections.end(); pointIt++) {
-            Point2f p = *pointIt;
+             Point2f p = *pointIt;
 
             printf("inter x %.2f y %.2f\n", p.x, p.y);
 

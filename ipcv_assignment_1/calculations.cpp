@@ -17,7 +17,7 @@ vector<Rect> detect_dartboards(Mat image, CascadeClassifier model) {
             Mat roi = Mat(image, r);
             model.detectMultiScale(roi, boards, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(50, 50), Size(500, 500));
             if (boards.size() != 0) { // if a detection has been made
-                Rect rect(boards[0].x + r.x, boards[0].y + r.y, boards[0].width, boards[0].height);
+                Rect rect(boards[0].x-10 + r.x, boards[0].y + r.y -10, boards[0].width+10, boards[0].height+10);
                 det_boards.emplace_back(rect);
             }
 
@@ -31,6 +31,9 @@ vector<Rect> detect_dartboards(Mat image, CascadeClassifier model) {
 
     // filter by line intersection
     vector<Rect> finalResult = line_intersection(image, det_boards);
+    if(finalResult.size() == 0){
+        return det_boards;
+    }
 
     return finalResult;
 }

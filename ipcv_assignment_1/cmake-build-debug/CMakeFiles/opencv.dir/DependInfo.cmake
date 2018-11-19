@@ -4,12 +4,12 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/Jeaung/Bristol/IPCV/Labs/CW/coms30121_assignment/ipcv_assignment_1/calculations.cpp" "/Users/Jeaung/Bristol/IPCV/Labs/CW/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles/opencv.dir/calculations.cpp.o"
-  "/Users/Jeaung/Bristol/IPCV/Labs/CW/coms30121_assignment/ipcv_assignment_1/hough.cpp" "/Users/Jeaung/Bristol/IPCV/Labs/CW/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles/opencv.dir/hough.cpp.o"
-  "/Users/Jeaung/Bristol/IPCV/Labs/CW/coms30121_assignment/ipcv_assignment_1/load_darts.cpp" "/Users/Jeaung/Bristol/IPCV/Labs/CW/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles/opencv.dir/load_darts.cpp.o"
-  "/Users/Jeaung/Bristol/IPCV/Labs/CW/coms30121_assignment/ipcv_assignment_1/load_faces.cpp" "/Users/Jeaung/Bristol/IPCV/Labs/CW/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles/opencv.dir/load_faces.cpp.o"
-  "/Users/Jeaung/Bristol/IPCV/Labs/CW/coms30121_assignment/ipcv_assignment_1/main.cpp" "/Users/Jeaung/Bristol/IPCV/Labs/CW/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles/opencv.dir/main.cpp.o"
-  "/Users/Jeaung/Bristol/IPCV/Labs/CW/coms30121_assignment/ipcv_assignment_1/util.cpp" "/Users/Jeaung/Bristol/IPCV/Labs/CW/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles/opencv.dir/util.cpp.o"
+  "/Users/george/Bristol/image_processing/dev_line_intersection/coms30121_assignment/ipcv_assignment_1/calculations.cpp" "/Users/george/Bristol/image_processing/dev_line_intersection/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles/opencv.dir/calculations.cpp.o"
+  "/Users/george/Bristol/image_processing/dev_line_intersection/coms30121_assignment/ipcv_assignment_1/hough.cpp" "/Users/george/Bristol/image_processing/dev_line_intersection/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles/opencv.dir/hough.cpp.o"
+  "/Users/george/Bristol/image_processing/dev_line_intersection/coms30121_assignment/ipcv_assignment_1/load_darts.cpp" "/Users/george/Bristol/image_processing/dev_line_intersection/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles/opencv.dir/load_darts.cpp.o"
+  "/Users/george/Bristol/image_processing/dev_line_intersection/coms30121_assignment/ipcv_assignment_1/load_faces.cpp" "/Users/george/Bristol/image_processing/dev_line_intersection/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles/opencv.dir/load_faces.cpp.o"
+  "/Users/george/Bristol/image_processing/dev_line_intersection/coms30121_assignment/ipcv_assignment_1/main.cpp" "/Users/george/Bristol/image_processing/dev_line_intersection/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles/opencv.dir/main.cpp.o"
+  "/Users/george/Bristol/image_processing/dev_line_intersection/coms30121_assignment/ipcv_assignment_1/util.cpp" "/Users/george/Bristol/image_processing/dev_line_intersection/coms30121_assignment/ipcv_assignment_1/cmake-build-debug/CMakeFiles/opencv.dir/util.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 

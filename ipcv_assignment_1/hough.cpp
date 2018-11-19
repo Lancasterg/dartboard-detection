@@ -95,7 +95,7 @@ vector<Vec3f> getCircleAreas(vector<Vec3f> circles, Mat image, int minRadius, in
     }
 
 
-    display("image", blank);
+//    display("image", blank);
 
 
     findContours(blank, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
@@ -120,7 +120,7 @@ vector<Vec3f> getCircleAreas(vector<Vec3f> circles, Mat image, int minRadius, in
         circle(drawing, mc[i], 4, color, -1, 8, 0);
     }
 
-    display("image", drawing);
+//    display("image", drawing);
 
 
     blank.convertTo(blank, CV_32F);
@@ -179,7 +179,7 @@ vector<Rect> hough_circle(const Mat &src, int threshold, int minRadius, int maxR
             }
         }
     }
-    display("hough space", hough_space);
+//    display("hough space", hough_space);
 
 
 
@@ -298,8 +298,8 @@ vector<Vec2f> hough_line(const Mat &src, int threshold, int delta) {
         }
     }
 
-    imshow("detected lines", src);
-    waitKey(0);
+//    imshow("detected lines", src);
+//    waitKey(0);
 
     return lines;
 }
