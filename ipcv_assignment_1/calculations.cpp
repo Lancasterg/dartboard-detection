@@ -5,6 +5,43 @@
 #include "header/hough.h"
 #include "header/util.h"
 
+vector<Rect> exlude_intersect(vector<Rect> boards) {
+    vector<Rect> result;
+    vector<Rect> toExclude;
+
+    for (Rect board : boards) {
+        for (Rect b : boards) {
+            if (board.x == b.x && board.y == b.y && board.width == b.width && board.height == b.height) {
+                continue;
+            }
+
+            if ((board & b).area() > 0) {
+                if (b.area() < board.area()) {
+                    toExclude.insert(toExclude.end(), b);
+                }
+            }
+
+        }
+    }
+
+
+    for (Rect board : boards) {
+        bool exclude = false;
+        for (Rect b : toExclude) {
+            if (board.x == b.x && board.y == b.y && board.width == b.width && board.height == b.height) {
+                exclude = true;
+                break;
+            }
+        }
+
+        if (!exclude) {
+            result.insert(result.end(), board);
+        }
+    }
+
+    return result;
+}
+
 vector<Rect> detect_dartboards(Mat image, CascadeClassifier model) {
     vector<Rect> ret;
     vector<Rect> circles = hough_circle(image, 12, 40, 80);
@@ -25,11 +62,11 @@ vector<Rect> detect_dartboards(Mat image, CascadeClassifier model) {
                 int avg_y = 0;
                 int avg_height = 0;
                 int avg_width = 0;
-                for (Rect b : boards){
+                for (Rect b : boards) {
                     avg_x += b.x;
                     avg_y += b.y;
                     avg_height += b.height;
-                    avg_width += b. width;
+                    avg_width += b.width;
                 }
                 avg_x /= boards.size();
                 avg_y /= boards.size();
@@ -39,7 +76,7 @@ vector<Rect> detect_dartboards(Mat image, CascadeClassifier model) {
                 // add the rects together
 
 
-                Rect rect(avg_x -10 + r.x, avg_y + r.y -10, avg_width+10, avg_height+10);
+                Rect rect(avg_x - 10 + r.x, avg_y + r.y - 10, avg_width + 10, avg_height + 10);
                 det_boards.emplace_back(rect);
             }
 
@@ -52,12 +89,11 @@ vector<Rect> detect_dartboards(Mat image, CascadeClassifier model) {
     }
 
     // filter by line intersection
-    vector<Rect> finalResult = line_intersection(image, det_boards);
-    if(finalResult.size() == 0){
-        return det_boards;
-    }
+    det_boards = line_intersection(image, det_boards);
 
-    return finalResult;
+    det_boards = exlude_intersect(det_boards);
+
+    return det_boards;
 }
 
 

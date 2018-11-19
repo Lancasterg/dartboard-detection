@@ -231,6 +231,8 @@ vector<Rect> hough_circle(const Mat &src, int threshold, int minRadius, int maxR
         det_circles.emplace_back(boundingRect(contours[i]));
     }
 
+//    imshow("detected circles", src);
+//    waitKey(0);
 
     return det_circles;
 }
@@ -282,17 +284,17 @@ vector<Vec2f> hough_line(const Mat &src, float threshold, int delta) {
     for (int rho = 0; rho < diag; rho++) {
         for (int thetaDegree = 0; thetaDegree < 361; thetaDegree++) {
             if (votes[rho][thetaDegree] > threshold) {
-                Point pt1, pt2;
                 double theta = thetaDegree * M_PI / 180;
-                double a = cos(theta), b = sin(theta);
-                double x0 = a * rho, y0 = b * rho;
-                pt1.x = cvRound(x0 + 1000 * (-b));
-                pt1.y = cvRound(y0 + 1000 * (a));
-                pt2.x = cvRound(x0 - 1000 * (-b));
-                pt2.y = cvRound(y0 - 1000 * (a));
-                line(src, pt1, pt2, Scalar(0, 0, 255), 1, CV_AA);
-
                 lines.insert(lines.end(), Vec2f(rho, (float) theta));
+
+//                Point pt1, pt2;
+//                double a = cos(theta), b = sin(theta);
+//                double x0 = a * rho, y0 = b * rho;
+//                pt1.x = cvRound(x0 + 1000 * (-b));
+//                pt1.y = cvRound(y0 + 1000 * (a));
+//                pt2.x = cvRound(x0 - 1000 * (-b));
+//                pt2.y = cvRound(y0 - 1000 * (a));
+//                line(src, pt1, pt2, Scalar(0, 0, 255), 1, CV_AA);
 //                printf("%d %d %d\n", rho, thetaDegree, hough_space.at<int>(rho, thetaDegree));
             }
         }

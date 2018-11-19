@@ -5,7 +5,7 @@
 #include "header/hough.h"
 #include "header/util.h"
 
-vector<Rect> sliding_window_classification(Mat &src, CascadeClassifier model){
+vector<Rect> sliding_window_classification(Mat &src, CascadeClassifier model) {
     int min_window = 40;
     int max_window = src.rows;
     vector<Rect> ret;
@@ -41,13 +41,59 @@ vector<Rect> sliding_window_classification(Mat &src, CascadeClassifier model){
     return ret;
 }
 
+vector<Vec2f> getCentral(Mat sub, vector<Vec2f> lines) {
+    float diag = sqrt(pow(sub.rows, 2) + pow(sub.cols, 2));
 
+    vector<Vec2f> centralLines;
+    for (Vec2f l : lines) {
+        float rho = l.val[0];
+        float theta = l.val[1];
 
+        Point2f o1, p1;
+        float a = cos(theta), b = sin(theta);
+        float x0 = a * rho, y0 = b * rho;
+        o1.x = cvRound(x0 + 1000 * (-b));
+        o1.y = cvRound(y0 + 1000 * (a));
+        p1.x = cvRound(x0 - 1000 * (-b));
+        p1.y = cvRound(y0 - 1000 * (a));
 
+        float factor = 1 / 4.3;
 
+        if (rho < diag * factor || rho > diag * (1 - factor)) {
+            continue;
+        } else {
+            line(sub, o1, p1, Scalar(0, 0, 255), 1, CV_AA);
+            centralLines.insert(centralLines.end(), l);
+        }
+    }
 
+//    imshow("detected lines", sub);
+//    waitKey(0);
 
+    return centralLines;
+}
 
+bool diverseDegree(Mat sub, vector<Vec2f> lines) {
+    float totalDifference = 0;
+
+    int n = 0;
+    for (Vec2f line : lines) {
+        for (Vec2f l : lines) {
+            if (fabs(line.val[0] - l.val[0]) < 1e-6 && fabs(line.val[1] - l.val[1]) < 1e-6) {
+                continue;
+            } else {
+                n++;
+                totalDifference += fabs(line.val[1] * 180 / M_PI - l.val[1] * 180 / M_PI);
+            }
+        }
+    }
+
+    float avg = totalDifference / n;
+
+    cout << "degree difference avg" << avg << endl;
+
+    return avg > 8;
+}
 
 vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
     vector<Rect> result;
@@ -64,16 +110,23 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
 //        waitKey(0);
 
         // detect lines in a sub-region
-        vector<Vec2f> lines = hough_line(sub, it->width / 2.33, 12);
+        vector<Vec2f> lines = hough_line(sub, it->width / 3.4, 25);
 
-        if (lines.size() < MIN_LINES) { // only one line detected, it's not a dartboard
+        vector<Vec2f> centralLines = getCentral(sub, lines);
+
+        if (!diverseDegree(sub, centralLines)) {
+            cout << "degree difference too small" << endl;
+            continue;
+        }
+
+        if (centralLines.size() < MIN_LINES) { // only one line detected, it's not a dartboard
             continue;
         }
 
         // find all points of intersection in a sub-region
         vector<Point2f> intersections;
 
-        for (vector<Vec2f>::iterator lineIt1 = lines.begin(); lineIt1 != lines.end(); lineIt1++) {
+        for (vector<Vec2f>::iterator lineIt1 = centralLines.begin(); lineIt1 != centralLines.end(); lineIt1++) {
             float rho1 = lineIt1->val[0];
             float theta1 = lineIt1->val[1];
 
@@ -87,7 +140,7 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
             p1.x = cvRound(x0 - 1000 * (-b));
             p1.y = cvRound(y0 - 1000 * (a));
 
-            for (vector<Vec2f>::iterator lineIt2 = lines.begin(); lineIt2 != lines.end(); lineIt2++) {
+            for (vector<Vec2f>::iterator lineIt2 = centralLines.begin(); lineIt2 != centralLines.end(); lineIt2++) {
                 float rho2 = lineIt2->val[0];
                 float theta2 = lineIt2->val[1];
 
@@ -125,12 +178,14 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
         }
 
         Rect2f center;
-        center.x = (float) sub.cols * 3 / 10;
-        center.y = (float) sub.rows * 3 / 10;
-        center.width = (float) sub.cols * 4 / 10;
-        center.height = (float) sub.rows * 4 / 10;
+        center.x = (float) sub.cols * 2.95 / 10;
+        center.y = (float) sub.rows * 2.95 / 10;
+        center.width = (float) sub.cols * 4.3 / 10;
+        center.height = (float) sub.rows * 4.3 / 10;
 
         int numInCenter = 0;
+
+//        cout << center << endl;
 
         // it means the detection is not very accurate so we might have several points of intersection
         // check if most of points are located inside the center area of the image

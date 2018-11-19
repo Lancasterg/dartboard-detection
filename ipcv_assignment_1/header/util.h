@@ -4,8 +4,8 @@
 
 #ifndef COMS30121_ASSIGNMENT_UTIL_H
 
-#define LIMIT_PERCENTAGE_OF_POINTS .6
-#define MIN_LINES 5
+#define LIMIT_PERCENTAGE_OF_POINTS .19
+#define MIN_LINES 1
 
 vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles);
 vector<Rect> sliding_window_classification(Mat &src, CascadeClassifier model);
