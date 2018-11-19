@@ -1,4 +1,4 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/george/Bristol/image_processing/dev_line_intersection/coms30121_assignment/ipcv_assignment_1
 -- The C compiler identification is AppleClang 10.0.0.10001044
 -- The CXX compiler identification is AppleClang 10.0.0.10001044
 -- Check for working C compiler: /Library/Developer/CommandLineTools/usr/bin/cc
@@ -16,4 +16,4 @@
 -- Found OpenCV: /usr/local (found version "3.4.2") 
 -- Configuring done
 -- Generating done
--- Build files have been written to: /Users/george/Bristol/image_processing/master/coms30121_assignment/ipcv_assignment_1/cmake-build-debug
+-- Build files have been written to: /Users/george/Bristol/image_processing/dev_line_intersection/coms30121_assignment/ipcv_assignment_1/cmake-build-debug

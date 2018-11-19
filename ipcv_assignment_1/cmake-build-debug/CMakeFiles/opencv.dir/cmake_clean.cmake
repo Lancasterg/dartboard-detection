@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/opencv.dir/load_darts.cpp.o"
   "CMakeFiles/opencv.dir/calculations.cpp.o"
   "CMakeFiles/opencv.dir/hough.cpp.o"
+  "CMakeFiles/opencv.dir/util.cpp.o"
   "opencv.pdb"
   "opencv"
 )
