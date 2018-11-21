@@ -18,24 +18,23 @@ String cascade_dart_name = "../training_data/stage3/cascade.xml";
 CascadeClassifier cascade;
 
 void test_detector();
+void task_1bb();
 void task_four(char *imageName);
 
 /** @function main */
 int main(int argc, char **argv) {
 
     char *imageName = argv[1];
+//    task_1bb();
+
 
 //    task_four(imageName);
 //    task_three(imageName);
-
-
-
-
      test_detector();
 
 
 //    CascadeClassifier model;
-//
+//0
 //    if (!model.load(cascade_name)) {
 //        printf("--(!)Error loading\n");
 //        return 1;
@@ -48,7 +47,7 @@ int main(int argc, char **argv) {
     //label_faces();
     //label_darts();
     //task_one_a();
-    //task_one_b();
+//    task_one_b();
     //task_two();
     //task_one_b();
 //    task_two_b();
@@ -104,7 +103,6 @@ void test_detector(){
     // calculate f1 score for each
     for (int i = 0; i < 16; i++){
         f1_scores.emplace_back(calculate_f1(tpr.at(i),rects.at(i).size(),true_labels.at(i).size()));
-
         printf("darts%d f1_score: %f\n",i, f1_scores[i]);
     }
 
@@ -230,9 +228,51 @@ void task_one_a() {
     */
 }
 
+void task_1bb(){
+    vector<Mat> frames;
+    vector<vector<Rect>> rects;
+    vector<int> tpr;
+    vector<double> f1_scores;
+    vector<vector<Rect>> true_labels;
+    char input_str[18];
 
-void get_dataset_f1() {
+    // 1. Load the Strong Classifier in a structure called `Cascade'
+    if (!cascade.load(cascade_name)) {
+        printf("--(!)Error loading\n");
+        return;
+    };
 
+    true_labels = load_face_labels();
+
+    for (int i = 0; i < 16; i++) {
+        sprintf(input_str, "../img/dart%d.jpg", i);
+        frames.emplace_back(imread(input_str));
+    }
+
+    // detect all rects
+    for (Mat m : frames) {
+        rects.emplace_back(detect(m, cascade));
+    }
+
+    // calculate tpr
+    for (int i = 0; i < 16; i++) {
+        tpr.emplace_back(calculate_tpr(true_labels.at(i), rects.at(i), frames.at(i)));
+    }
+
+    // calculate f1 score for each
+    for (int i = 0; i < 16; i++) {
+        printf("dart%d:\t",i);
+        f1_scores.emplace_back(calculate_f1(tpr.at(i), rects.at(i).size(), true_labels.at(i).size()));
+    }
+
+    for (int i = 0; i < 16; i++) {
+        for (int j = 0; j < rects[i].size(); j++) {
+            rectangle(frames[i], Point(rects[i][j].x, rects[i][j].y),
+                      Point(rects[i][j].x + rects[i][j].width, rects[i][j].y + rects[i][j].height), Scalar(0, 255, 0),
+                      2);
+
+        }
+    }
 }
 
 /** Task 1b, calculate the TPR for images 5 and 15 when detecting for faces */
@@ -295,17 +335,6 @@ void task_two_b() {
         rects.emplace_back(detect(m, cascade));
     }
 
-    for (int i = 0; i < 16; i++) {
-        for (int j = 0; j < rects[i].size(); j++) {
-            rectangle(frames[i], Point(rects[i][j].x, rects[i][j].y),
-                      Point(rects[i][j].x + rects[i][j].width, rects[i][j].y + rects[i][j].height), Scalar(0, 255, 0),
-                      2);
-
-        }
-        imshow("frames", frames[i]);
-        waitKey(0);
-
-    }
 
     // calculate tpr
     for (int i = 0; i < 16; i++) {
@@ -317,6 +346,16 @@ void task_two_b() {
         f1_scores.emplace_back(calculate_f1(tpr.at(i), rects.at(i).size(), true_labels.at(i).size()));
         cout << "f1_score: " << f1_scores.at(i) << endl;
     }
+
+    for (int i = 0; i < 16; i++) {
+        for (int j = 0; j < rects[i].size(); j++) {
+            rectangle(frames[i], Point(rects[i][j].x, rects[i][j].y),
+                      Point(rects[i][j].x + rects[i][j].width, rects[i][j].y + rects[i][j].height), Scalar(0, 255, 0),
+                      2);
+
+        }
+    }
+
 }
 
 

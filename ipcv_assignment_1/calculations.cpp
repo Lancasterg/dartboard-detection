@@ -208,7 +208,9 @@ double calculate_f1(int true_positives, int total_detections, int true_detection
     double precision = true_positives / (true_positives + false_positives);
     double false_negatives = true_detections - true_positives;
     double recall = true_positives / (true_positives + false_negatives);
-    return 2 * ((precision * recall) / (precision + recall));
+    double f1 = 2 * ((precision * recall) / (precision + recall));
+    printf("f1 score: %f\tprecision: %f\t recall: %f\t\n\n",f1, precision, recall);
+    return f1;
 }
 
 /**

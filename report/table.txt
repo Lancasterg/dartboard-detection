@@ -1,0 +1,15 @@
+\begin{table}[!htp]
+\caption{All values of percentage overlap up to 68 per cent gave an identical F1 score when detecting faces from the test data set. This influenced the choice to set the overlap area to 68 per cent for this task. }
+\begin{center}
+\begin{tabular}{||c|c||}
+\hline
+Overlap Threshold (\%)	& F1 score	\\ \hline
+65		  	     & 0.541	   \\
+68							& 0.541		\\
+69											& 0.519		\\
+70															& 0.514  \\
+80															  	   & 0.459  \\ \hline
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}%
