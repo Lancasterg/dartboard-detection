@@ -37,174 +37,191 @@ This report outlines the tasks completed for Image Processing and Computer Visio
 \end{abstract}
 
 \section{The Viola-Jones Object Detector}
+\vspace{-0.2cm}
 Sixteen test images were annotated for ground truth. Each test image contains either faces, dartboards or a combination of both. In this first task, we use the Viola-Jones object detector to find faces within the test images. 
 \begin{figure}[htb]
 \centering
 \begin{subfigure}{.5\linewidth}
   \centering
   \includegraphics[width=.9\linewidth]{images/detected0.jpg}
-  \caption{darts4.jpg}
+  \caption{darts4}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\linewidth}
   \centering
+  \vspace{0.6cm}
   \includegraphics[width=.9\linewidth]{images/detected1.jpg}
-  \caption{darts5.jpg}
+  \caption{darts5}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.5\linewidth}
   \centering
+    \vspace{0.2cm}
   \includegraphics[width=.9\linewidth]{images/detected2.jpg}
-  \caption{darts13.jpg}
+  \caption{darts13}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\linewidth}
   \centering
+      \vspace{0.7cm}
   \includegraphics[width=.9\linewidth]{images/detected3.jpg}
-  \caption{darts14.jpg}
+  \caption{darts14}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.5\linewidth}
 \centering
+    \vspace{0.2cm}
 \includegraphics[width=0.9\linewidth]{images/detected4.jpg}
-\caption{darts15.jpg}
+\caption{darts15}
 \end{subfigure}
 
 
-\caption{Five images from the test data set. Green rectangles have been drawn where the Viola-Jones classifier has detected a face. }
+\caption{Five images from the test data set. Green rectangles show where the Viola-Jones classifier has detected a face. }
 \label{fig:q13}
 \end{figure}
 \par 
-The true positive rate for images \emph{darts5.jpg} and \emph{darts15.jpg} when tested using the Viola-Jones face detector are 1 and 0.667 respectively. 
+The true positive rate for images \emph{darts5} and \emph{darts15} when tested using the Viola-Jones face detector are 1 and 0.67 respectively. 
 \par
-Although the true positive rate can be used to indicate a classifiers accuracy, it does not reflect its true performance. It is always possible to get a 100 per cent detection rate on any classification task as we can select all possible areas of an image, regardless if they contain the target feature or not. The key to a good classifier is to get a high true positive rate, whilst keeping the false positive rate minimal. The F1 score measures the relationship between the precision and the recall of the model and can therefore be considered to be a more reliable measure of classifier performance.
+Although the true positive rate can be used to indicate a classifiers accuracy, it does not reflect its true performance. It is always possible to get a 100 per cent detection rate on any classification task as we can select all possible areas of an image, regardless of the number of false positives. The key to a good classifier is to get a high true positive rate, whilst keeping the false positive rate minimal. The F1 score measures the relationship between the precision and the recall of the model and can therefore be considered to be a more reliable measure of classifier performance.
 \par
-The true positive rate can be difficult to assess as it requires the definition of a rule to determine what counts as a detection. For this task, a true detection is defined as an area that shares a 68 per cent overlap with a ground truth annotation. A value of 68 per cent was chosen as it is the largest area of overlap before the F1 score starts to decline. Table 1 shows how the F1 score changes when the percentage overlap area is changed.
+Additionally, the true positive rate can be difficult to assess as it requires the definition of a rule to determine what counts as a detection. For this task, a true detection is defined as an area that shares a 68 per cent overlap with a ground truth annotation. A value of 68 per cent was chosen as it is the largest area of overlap before the F1 score starts to decline. 
 \par 
-\begin{table}[!htp]
-\caption{All values of percentage overlap up to 68 per cent gave an identical F1 score when detecting faces from the test data set. This influenced the choice to set the overlap area to 68 per cent for this task. }
+\begin{table}[htp]
+\caption{F1 scores, precision and recall for all images, when detecting faces using the Viola-Jones face detector.}
 \begin{center}
-\begin{tabular}{||c|c||}
+\begin{tabular}{||c|c|c|c||}
 \hline
-Overlap Threshold (\%) 	& F1 score 	\\ \hline
-0 					& 0.568		\\
-60 					& 0.541		\\
-65					& 0.541		\\
-68					& 0.541		\\
-69					& 0.519		\\
-70 					& 0.514		\\
-80					& 0.459		\\ \hline
+Image Name			 	& F1 Score 	& Precision	& Recall            \\ \hline
+dart0						& 1.00		&	1.00		& 1.00		\\
+dart1						& 1.00		&	0.00		& 0.00		\\
+dart2						& 1.00		&	0.00		& 0.00		\\
+dart3						& 1.00		&	0.00		& 0.00		\\
+dart4						& 1.00		&	1.00		& 1.0	0		\\
+dart5						& 0.79		&	0.65		& 1.00		\\
+dart6						& 1.00		&	0.00		& 0.00		\\
+dart7						& 1.00		&	1.00		& 0.00		\\
+dart8						& 1.00		&	0.00		& 0.00		\\
+dart9						& 0.67		&	0.50		& 1.00		\\
+dart10					& 1.00		&	0.00		& 0.00		\\
+dart11					& 0.67		&	1.00		& 0.50		\\
+dart12					& 1.00		&	0.00		& 0.00		\\
+dart13					& 1.00		&	1.00		& 1.00		\\
+dart14					& 0.36		&	0.22		& 1.00		\\
+dart15					& 0.40		&	0.50		& 0.33		\\ \hline
+Average F1 Score 		 	&	\multicolumn{3}{c||}{0.87} 			\\ \hline
 \end{tabular}
 \end{center}
 \label{default}
-\end{table}%
+\end{table}
 \par
-Need more info here
+Using the Viola-Jones face detector gives fair results when applied to the 16 test images. Images that have been correctly classified as containing no faces have been given an F1 score of 1. When excluding these images from the calculation, the F1 score is reduced to 0.81.
 
 \newpage
 \section{The Dartboard Detector}
-To detect dartboards, the Viola-Jones classifier was trained on a data set generated from a single bitmap image of a dartboard, as well as a set of negative images. 
+To detect dartboards, the Viola-Jones classifier was trained on a data set generated from a single bitmap image of a dartboard, in addition to a set of negative images. 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=\linewidth]{images/TPRvsFPR}
-\caption{True positive rate plotted against false positive rate when training the cascade classifier on 500 images of dartboards and 500 negative images. Each stage of training has been plotted as its own point.}
+\includegraphics[width=0.8\linewidth]{images/TPRvsFPR}
+\caption{True positive rate plotted against false positive rate when training the cascade classifier on 500 images of dartboards and 500 negative images. Each stage of training can be identified by its own point.}
 \label{default}
 \end{center}
 \end{figure}
 \par
 
-On the first stage of training, all samples are classified as true. This is reflected by a value of 1 for both the true positive rate and false positive rate. As the classifier progresses through further training stages, the false positive rate decreases, whilst the true positive rate remains the same. This indicates that the classifier is improving after each training stage. 
+On the first stage of training, all samples are classified as true. This is reflected by a value of 1 for both the true positive rate and false positive rate. As the classifier progresses through further training stages, the false positive rate decreases, whilst the true positive rate remains the same. This indicates that the classifier improved after each training stage, by decreasing the number of false detections. 
 \par
+
+To measure how varying the number of training images affects performance, two identical Viola-Jones classifiers were trained on sets of 500 (a), and 1000 (b) true images and negatives. The F1 score of classifier b was 0.06 higher than classifier a. This suggests that the classifiers performance can be improved by increasing the amount of training data. 
 \begin{table}[!htb]
-\caption{F1 scores for all images, when detecting for dartboards using a cascade classier trained on dartboards.}
+\caption{F1 scores for all images, when detecting dartboards using the Viola-Jones cascade classifier trained on dartboards.}
 \begin{center}
 \begin{tabular}{||c|c|c||}
 \hline
 \multirow{2}{*}{Image Name} & \multicolumn{2}{c||}{F1 Score}                \\ 
                                  & 500 Training Images (a)	& 1000 Training images (b) \\ \hline
-dart0.jpg			& 0.5	00	&	0.250	\\
-dart1.jpg			& 0		&	0.500	\\
-dart2.jpg			& 0.250	&	0.400	\\
-dart3.jpg			& 0.538	&	0.333	\\
-dart4.jpg			& 0.4	00	&	0.250	\\
-dart5.jpg			& 0.154	&	0.200	\\
-dart6.jpg			& 0.333	&	0.500	\\
-dart7.jpg			& 0		&	0.250	\\
-dart8.jpg			& 0.160	&	0.250	\\
-dart9.jpg			& 0.222	&	0.200	\\
-dart10.jpg			& 0.400	&	0.545	\\
-dart11.jpg			& 0.222	&	0.222	\\
-dart12.jpg			& 0.667	&	0.500	\\
-dart13.jpg			& 0.200	&	0.333	\\
-dart14.jpg			& 0.087	&	0.138	\\
-dart15.jpg			& 0.667	&	0.500	\\ \hline
-Average F1 score 	& 0.276	&	0.336	\\ \hline
+dart0.jpg			& 0.5	0	&	0.25	\\
+dart1.jpg			& 0.00	&	0.50	\\
+dart2.jpg			& 0.25	&	0.40	\\
+dart3.jpg			& 0.54	&	0.33	\\
+dart4.jpg			& 0.4	0	&	0.25	\\
+dart5.jpg			& 0.15	&	0.20	\\
+dart6.jpg			& 0.33	&	0.50	\\
+dart7.jpg			& 0.00	&	0.25	\\
+dart8.jpg			& 0.16	&	0.25	\\
+dart9.jpg			& 0.22	&	0.20	\\
+dart10.jpg			& 0.40	&	0.55	\\
+dart11.jpg			& 0.22	&	0.22	\\
+dart12.jpg			& 0.67	&	0.50	\\
+dart13.jpg			& 0.20	&	0.33	\\
+dart14.jpg			& 0.09	&	0.14	\\
+dart15.jpg			& 0.67	&	0.50	\\ \hline
+Average F1 score 	& 0.28	&	0.34	\\ \hline
 \end{tabular}
 \end{center}
 \label{default}
 \end{table}%
-Two identical Viola-Jones classifiers were trained on sets of 500 (a), and 1000 (b) true images and negatives. The F1 score of classifier b was 0.06 higher than classifier a. 
-
 \par
-Observed differences in accuracy between training and testing can be attributed to the training data consisting of a small set of critical features. In contrast, the test images contain a large amount of irrelevant background noise, which needed to be discarded by the cascade. 
-
+Observed differences in accuracy between training and testing can be attributed to the training data consisting of a small set of critical features. In contrast, the test images contain a large amount of irrelevant background noise, which needs to be discarded by the cascade. 
 \par
 \begin{figure}[htb]
 \centering
 \begin{subfigure}{.5\linewidth}
   \centering
   \includegraphics[width=.9\linewidth]{images/task2/detected4.jpg}
-  \caption{darts4.jpg}
+  \caption{darts4}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\linewidth}
   \centering
+  \vspace{0.7cm}
   \includegraphics[width=.9\linewidth]{images/task2/detected5.jpg}
-  \caption{darts5.jpg}
+  \caption{darts5}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.5\linewidth}
   \centering
+    \vspace{0.2cm}
   \includegraphics[width=.9\linewidth]{images/task2/detected13.jpg}
-  \caption{darts13.jpg}
+  \caption{darts13}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\linewidth}
   \centering
+    \vspace{0.7cm}
   \includegraphics[width=.9\linewidth]{images/task2/detected14.jpg}
-  \caption{darts14.jpg}
+  \caption{darts14}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Five images from the test data set. Green rectangles have been drawn where the Viola-Jones classifier has detected a dartboard.}
+\caption{Four images from the test data set. Green rectangles have been drawn where the Viola-Jones classifier has detected a dartboard.}
 \end{figure}
 \par
-
+The performance of the model at this stage is remarkably worse than when detecting faces. Haar-like features may be best suited for detecting faces, rather than dartboards. 
 \newpage
 \section{Integration with Shape Detectors}
-Both linear and circular hough transforms have been used in conjunction with the Viola-Jones classifier to improve accuracy. 
+Both linear and circular hough transforms have been used in conjunction with the Viola-Jones classifier to improve the precision and recall of the system. 
 \begin{table}[htp]
-\caption{F1 scores, precision and recall for all images, when detecting for dartboards using the cascade classier combined with shape detection techniques. }
+\caption{F1 scores, precision and recall for all images, when detecting for dartboards using the Viola-Jones classier combined with shape detection techniques. }
 \begin{center}
 \begin{tabular}{||c|c|c|c||}
 \hline
-Image Name			 	& F1 Score 	& Precision	& Recall            \\ \hline
-dart0.jpg					& 1.000		&	1.000	& 1.000		\\
-dart1.jpg					& 1.000		&	1.000	& 1.000		\\
-dart2.jpg					& 1.000		&	1.000	& 1.000		\\
-dart3.jpg					& 0.333		&	0.200	& 1.000		\\
-dart4.jpg					& 1.000		&	1.000	& 1.000		\\
-dart5.jpg					& 1.000		&	1.000	& 1.000		\\
-dart6.jpg					& 1.000		&	1.000	& 1.000		\\
-dart7.jpg					& 1.000		&	1.000	& 1.000		\\
-dart8.jpg					& 1.000		&	1.000	& 1.000		\\
-dart9.jpg					& 0.000		&	0.000	& 0.000		\\
-dart10.jpg					& 1.000		&	1.000	& 1.000		\\
-dart11.jpg					& 0.222		&	0.125	& 1.000		\\
-dart12.jpg					& 0.667		&	0.500	& 1.000		\\
-dart13.jpg					& 1.000		&	1.000	& 1.000		\\
-dart14.jpg					& 0.500		&	0.333	& 1.000		\\
-dart15.jpg					& 0.667		&	0.500	& 1.000		\\ \hline
-Average 		 			& 0.774		&	0.729	& 0.938 		\\ \hline
+Image Name		 	& F1 Score 	& Precision	& Recall            \\ \hline
+dart0					& 1.00		&	1.00		& 1.00		\\
+dart1					& 1.00		&	1.00		& 1.00		\\
+dart2					& 1.00		&	1.00		& 1.00		\\
+dart3					& 1.00		&	1.00		& 1.00		\\
+dart4					& 1.00		&	1.00		& 1.00		\\
+dart5					& 1.00		&	1.00		& 1.00		\\
+dart6					& 1.00		&	1.00		& 1.00		\\
+dart7					& 1.00		&	1.00		& 1.00		\\
+dart8					& 1.00		&	1.00		& 1.00		\\
+dart9					& 0.67		&	0.50		& 1.00		\\
+dart10				& 1.00		&	1.00		& 1.00		\\
+dart11				& 1.00		&	1.00		& 1.00		\\
+dart12				& 1.00		&	1.00		& 1.00		\\
+dart13				& 1.00		&	1.00		& 1.00		\\
+dart14				& 0.67		&	0.50		& 1.00		\\
+dart15				& 1.00		&	1.00		& 1.00		\\ \hline
+Average 		 		& 0.96		&	0.94		& 1.00 		\\ \hline
 \end{tabular}
 \end{center}
 \label{default}
@@ -228,30 +245,35 @@ Average 		 			& 0.774		&	0.729	& 0.938 		\\ \hline
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\linewidth}
+\vspace{0.78cm}
   \centering
   \includegraphics[width=.9\linewidth]{images/task3/worstthresh.png}
   \caption*{Gradient threshold}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.5\linewidth}
+\vspace{0.3cm}
   \centering
   \includegraphics[width=.9\linewidth]{images/task3/bestcirclehough.png}
   \caption*{Circular Hough Transform}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\linewidth}
+\vspace{1.1cm}
   \centering
   \includegraphics[width=.9\linewidth]{images/task3/worstcirclehough.png}
   \caption*{Circular Hough Transform}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.5\linewidth}
+\vspace{0.3cm}
   \centering
   \includegraphics[width=.9\linewidth]{images/task3/bestresult.png}
   \caption{Detected Area}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\linewidth}
+\vspace{1.1cm}
   \centering
   \includegraphics[width=.9\linewidth]{images/task3/worstresult.png}
   \caption{Detected Area}
@@ -259,7 +281,7 @@ Average 		 			& 0.774		&	0.729	& 0.938 		\\ \hline
 \end{subfigure}
 \caption{Best and worst cases for the dartboard detector. Column a shows the best case, and has a F1 score of 1.  Column b shows the worst case is the worst case, and has an F1 score of 0.667}
 \end{figure}
-The rationale for building the classifier in this way include: 
+Reasons  for building the classifier in this way include: 
 \begin{itemize}
 \item A circular hough transform is used to find circular features in the image;
 \item The Viola-Jones object detector then determines if there are dartboards in the important area of the image;
