@@ -102,10 +102,9 @@ void test_detector(){
 
     // calculate f1 score for each
     for (int i = 0; i < 16; i++){
+        printf("darts%d\t",i);
         f1_scores.emplace_back(calculate_f1(tpr.at(i),rects.at(i).size(),true_labels.at(i).size()));
-        printf("darts%d f1_score: %f\n",i, f1_scores[i]);
     }
-
 }
 
 void task_four(char *imageName){

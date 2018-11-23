@@ -4,6 +4,9 @@
 
 #include "header/hough.h"
 #include "header/util.h"
+#include "opencv2/xfeatures2d.hpp"
+
+using namespace cv::xfeatures2d;
 
 vector<Rect> sliding_window_classification(Mat &src, CascadeClassifier model) {
     int min_window = 40;
@@ -332,4 +335,93 @@ vector<Rect> template_matching(const Mat &src, vector<Rect> targets) {
     }
 
     return result;
+}
+
+
+/**
+ * Detect dartboards using speeded up robust features
+ *
+ * code adapted from:
+ *
+ * http://www.coldvision.io/2016/06/27/object-detection-surf-knn-flann-opencv-3-x-cuda/
+ *
+ * http://answers.opencv.org/question/16548/object-detection-using-surf/
+ *
+ * @param im_scene: input image
+ * @return good points: All detected points on a dartboard
+ */
+vector<Rect> filter_SURF(Mat im_scene, vector<Rect> det_boards) {
+
+    // Read in image and resize to
+    Mat image = im_scene;
+    Mat im_object = imread("../training_data/dart.bmp", 0);
+    resize(im_object, im_object, Size(175, 175));
+    cvtColor(im_scene, im_scene, COLOR_RGB2GRAY);
+
+    vector<KeyPoint> keypoints_object, keypoints_scene; // keypoints
+
+    Mat descriptors_object, descriptors_scene; // descriptors (features)
+
+    int minHessian = 400;
+
+    // Detect keypoints and decriptors
+    Ptr<SURF> surf = SURF::create(minHessian);
+    surf->detectAndCompute(im_object, noArray(), keypoints_object, descriptors_object);
+    surf->detectAndCompute(im_scene, noArray(), keypoints_scene, descriptors_scene);
+
+    //-- Step 3: Matching descriptor vectors using FLANN matcher
+    FlannBasedMatcher matcher; // FLANN - Fast Library for Approximate Nearest Neighbors
+    vector<vector<DMatch> > matches;
+    matcher.knnMatch(descriptors_object, descriptors_scene, matches, 2); // find the best 2 matches of each descriptor
+
+
+    //-- Step 4: Select only good matches
+    std::vector<DMatch> good_matches;
+    for (int k = 0; k < std::min(descriptors_scene.rows - 1, (int) matches.size()); k++) {
+        if ((matches[k][0].distance < 0.95 * (matches[k][1].distance)) &&
+            ((int) matches[k].size() <= 2 && (int) matches[k].size() > 0)) {
+            // take the first result only if its distance is smaller than 0.6*second_best_dist
+            // that means this descriptor is ignored if the second distance is bigger or of similar
+            good_matches.push_back(matches[k][0]);
+        }
+    }
+
+    //-- Step 5: Draw lines between the good matching points
+    Mat img_matches;
+    drawMatches(im_object, keypoints_object, im_scene, keypoints_scene,
+                good_matches, img_matches, Scalar::all(-1), Scalar::all(-1),
+                vector<char>(), DrawMatchesFlags::DEFAULT);
+
+    // Get the good keypoints
+    std::vector<Point2f> good_points;
+    for (int i = 0; i < good_matches.size(); i++) {
+
+        good_points.push_back(keypoints_scene[good_matches[i].trainIdx].pt);
+    }
+
+    printf("Keypoints scene: %d\n",(int) keypoints_scene.size());
+    printf("Good points: %d\n",(int) good_points.size());
+
+
+    imshow("Good Matches & Object detection", img_matches);
+    waitKey(0);
+
+
+    int del = 0;
+    for (int i = 0; i < det_boards.size(); i++) {
+
+        for (Point2f point: good_points) {
+            // if rect contains a point
+            if (det_boards[i].contains(point)) {
+                del++;
+            }
+        }
+        if (del < 1 && det_boards.size() > 0){
+            det_boards.erase(det_boards.begin()+i);
+        }
+        del = 0;
+    }
+
+    return det_boards;
+
 }

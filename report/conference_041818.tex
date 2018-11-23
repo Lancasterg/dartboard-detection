@@ -33,11 +33,11 @@ mu18336@bristol.ac.uk}
 \maketitle
 
 \begin{abstract}
-This report outlines the tasks completed for Image Processing and Computer Vision assignment one. Our final classifier, which has been extended to do x, y and z has an F1 score of x.xx when tested against the 16 test images. 
+This report outlines the tasks completed for Image Processing and Computer Vision assignment one. Our final classifier, which uses template matching and speeded up robust features (SURF), has an F1 score of x.xx when tested against the 16 test images. 
 \end{abstract}
 
 \section{The Viola-Jones Object Detector}
-\vspace{-0.2cm}
+\vspace{-0.15cm}
 Sixteen test images were annotated for ground truth. Each test image contains either faces, dartboards or a combination of both. In this first task, we use the Viola-Jones object detector to find faces within the test images. 
 \begin{figure}[htb]
 \centering
@@ -195,8 +195,7 @@ Observed differences in accuracy between training and testing can be attributed 
 \caption{Four images from the test data set. Green rectangles have been drawn where the Viola-Jones classifier has detected a dartboard.}
 \end{figure}
 \par
-The performance of the model at this stage is remarkably worse than when detecting faces. Haar-like features may be best suited for detecting faces, rather than dartboards. 
-\newpage
+The performance of the model at this stage is remarkably worse than when detecting faces. The face detection clasifier has been trained on a larger number of stages, so the two systems are not comparable.  \newpage
 \section{Integration with Shape Detectors}
 Both linear and circular hough transforms have been used in conjunction with the Viola-Jones classifier to improve the precision and recall of the system. 
 \begin{table}[htp]
@@ -290,16 +289,71 @@ Reasons  for building the classifier in this way include:
 \newpage
 \par
 The solution at this level gives very good results, achieving a true positive rate of 1 for all images. Only images 9 and 14 have imperfect F1 scores, caused by false positives. Image 9 could be considered to be a true positive as the classifier has detected a dartboard on a t-shirt. 
+\par
+Merits of the classifier include: 
+\begin{itemize}
+	\item It has a perfect recall value for all images;
+	\item The false positive rate is very low, with only three false positives in the entire data set;
+\end{itemize}
+And the shortcomings include:
+\begin{itemize}
+	\item The classifiers parameters have been tuned to perform well on the test data set, it may not generalise well to other images;
+	\item Classification speed is slow due to the hough transform. It could not be applied to data in real-time. 
+\end{itemize}
 
 
 
 
 \newpage
 \section{Further Improvements}
+As the dartboard detector from part three has a perfect true positive rate, improvement can only be made to the false positive rate. Two filters, using SURF and template matching have been used as final stages to reduce the number of false positives, and achieve a perfect F1 score for the test data set. 
+\par
+\subsection{SURF}
+SURF aims to map the relationship between a descriptor and detector to find similarities in images. (Will write more about this later). \par
+
+Only areas with more than two significant points of interest have been kept in the list of detected dartboards.
+\par 
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.8\linewidth]{images/SURF.png}
+\caption{SURF, applied to the test data set. }
+\label{default}
+\end{center}
+\end{figure}
 
 
 
+\subsection{Template Matching}
+Template matching is used to  match parts of an image to a template. (will write more about this later).
 
+\subsection{Results}
+\begin{table}[htp]
+\caption{F1 scores, precision and recall for all images, when detecting for dartboards using the Viola-Jones classier combined with shape detection techniques, SURF and template matching. }
+\begin{center}
+\begin{tabular}{||c|c|c|c||}
+\hline
+Image Name		 	& F1 Score 	& Precision	& Recall            \\ \hline
+dart0					& 1.00		&	1.00		& 1.00		\\
+dart1					& 1.00		&	1.00		& 1.00		\\
+dart2					& 1.00		&	1.00		& 1.00		\\
+dart3					& 1.00		&	1.00		& 1.00		\\
+dart4					& 1.00		&	1.00		& 1.00		\\
+dart5					& 1.00		&	1.00		& 1.00		\\
+dart6					& 1.00		&	1.00		& 1.00		\\
+dart7					& 1.00		&	1.00		& 1.00		\\
+dart8					& 1.00		&	1.00		& 1.00		\\
+dart9					& 1.00		&	1.00		& 1.00		\\
+dart10				& 1.00		&	1.00		& 1.00		\\
+dart11				& 1.00		&	1.00		& 1.00		\\
+dart12				& 1.00		&	1.00		& 1.00		\\
+dart13				& 1.00		&	1.00		& 1.00		\\
+dart14				& 1.00		&	1.00		& 1.00		\\
+dart15				& 1.00		&	1.00		& 1.00		\\ \hline
+Average 		 		& 1.00		&	1.00		& 1.00 		\\ \hline
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}
 
 
 \end{document}
