@@ -93,6 +93,8 @@ vector<Rect> detect_dartboards(Mat image, CascadeClassifier model) {
 
     det_boards = exlude_intersect(det_boards);
 
+    det_boards = template_matching(image, det_boards);
+
     return det_boards;
 }
 
@@ -209,7 +211,7 @@ double calculate_f1(int true_positives, int total_detections, int true_detection
     double false_negatives = true_detections - true_positives;
     double recall = true_positives / (true_positives + false_negatives);
     double f1 = 2 * ((precision * recall) / (precision + recall));
-    printf("f1 score: %f\tprecision: %f\t recall: %f\t\n\n",f1, precision, recall);
+    printf("f1 score: %f\tprecision: %f\t recall: %f\t\n\n", f1, precision, recall);
     return f1;
 }
 

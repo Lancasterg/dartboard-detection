@@ -89,7 +89,7 @@ vector<Vec3f> hough_circle(const Mat &src, int threshold, int minRadius, int max
 //    display("gradient magnitude", magn);
 
     thresholdMag(magn, 120);
-    display("threshold magnitude", magn);
+//    display("threshold magnitude", magn);
 
     Mat dir = gradDirection(blur_img);
 //    display("gradient direction", dir);
@@ -127,7 +127,7 @@ vector<Vec3f> hough_circle(const Mat &src, int threshold, int minRadius, int max
             }
         }
     }
-    display("hough space", hough_space);
+//    display("hough space", hough_space);
 
     vector<Vec3f> circles;
 
@@ -192,7 +192,7 @@ vector<Vec2f> hough_line(const Mat &src, float threshold, int delta) {
         }
     }
 
-    display("hough_space", hough_space);
+//    display("hough_space", hough_space);
     vector<Vec2f> lines;
     for (int rho = 0; rho < diag; rho++) {
         for (int thetaDegree = 0; thetaDegree < 361; thetaDegree++) {

@@ -252,3 +252,84 @@ vector<Rect> concentric_intersection(const Mat &image) {
 
     return det_circles;
 }
+
+vector<Rect> template_matching(const Mat &src, vector<Rect> targets) {
+    vector<Rect> result;
+    // load templates
+    int sizes[] = {20, 25, 30, 35, 40, 45, 50};
+    vector<Mat> templates;
+    for (int size : sizes) {
+        char output[50];
+        sprintf(output, "../templates/templ%d.png", size);
+        templates.push_back(imread(output));
+    }
+
+    int match_method = CV_TM_CCOEFF_NORMED;
+
+    for (const Rect &target : targets) {
+        Range rows(target.y, target.y + target.height);
+        Range cols(target.x, target.x + target.width);
+        Mat sub = src(rows, cols).clone();
+
+//        imshow("Source Image", sub);
+//        waitKey(0);
+
+        // match templates according to the size of a target
+        double max = 0;
+        double min = 2;
+        double scoreSum = 0;
+        vector<double> vals;
+        for (Mat templ : templates) {
+            if (target.width < templ.cols || target.height < templ.rows) {
+                cout << "filtered" << endl;
+                break;
+            }
+
+            // Create the result matrix
+            int result_cols = sub.cols - templ.cols + 1;
+            int result_rows = sub.rows - templ.rows + 1;
+
+            Mat matchingResult(result_rows, result_cols, CV_32F);
+
+            // Do the Matching and Normalize
+            matchTemplate(sub, templ, matchingResult, match_method);
+
+            // Localizing the best match with minMaxLoc
+            double minVal;
+            double maxVal;
+            Point minLoc;
+            Point maxLoc;
+            Point matchLoc;
+            minMaxLoc(matchingResult, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
+            matchLoc = maxLoc;
+
+            vals.push_back(maxVal);
+
+            max = max > maxVal ? max : maxVal;
+            min = min > maxVal ? maxVal : min;
+            scoreSum += maxVal;
+
+//            imshow("Source Image", temp);
+//            waitKey(0);
+        }
+
+        sort(vals.begin(), vals.end());
+
+        double median;
+
+        if (vals.size() % 2 == 0) {
+            median = (vals[vals.size() / 2 - 1] + vals[vals.size() / 2]) / 2;
+        } else {
+            median = vals[vals.size() / 2];
+        }
+
+        if (max > 0.51) {
+            result.emplace_back(target);
+        }
+
+        cout << "max " << max << " min " << min << " score avg " << scoreSum / vals.size() << " median " << median
+             << endl;
+    }
+
+    return result;
+}

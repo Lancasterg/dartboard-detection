@@ -10,9 +10,8 @@
 vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles);
 vector<Rect> concentric_intersection(const Mat &src);
 vector<Rect> sliding_window_classification(Mat &src, CascadeClassifier model);
+vector<Rect> template_matching(const Mat &src, vector<Rect> targets);
 
-
-// TODO should move concentric circle detection here
 
 #define COMS30121_ASSIGNMENT_UTIL_H
 
