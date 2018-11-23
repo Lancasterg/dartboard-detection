@@ -324,9 +324,29 @@ Only areas with more than two significant points of interest have been kept in t
 
 
 \subsection{Template Matching}
-Template matching is used to  match parts of an image to a template. (will write more about this later).
+Template matching is used to  match parts of an image to a template. Because the viola-jones detector only has 3 levels, it lacks features which can further reduce false positve rate. \par
+
+After experiments of using different templates, one of them is decided because it perfectly helps to reject false positives.
+\par 
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.8\linewidth]{images/template.png}
+\caption{template matching, final template chosen. }
+\label{default}
+\end{center}
+\end{figure}
+
+\par 
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.8\linewidth]{images/template_merit.jpg}
+\caption{template matching rejects 2 remaining false positves.}
+\label{default}
+\end{center}
+\end{figure}
 
 \subsection{Results}
+The key to successful template matching is to choose a template with enough feature to reject false areas. However, it shouldn't contain all the features of a dartboard because there may shelters, irregular shapes or light in the test images that prevent them from getting high enough scores in template matching. So many different templates should be tried before a suitable one can be found.\par
 \begin{table}[htp]
 \caption{F1 scores, precision and recall for all images, when detecting for dartboards using the Viola-Jones classier combined with shape detection techniques, SURF and template matching. }
 \begin{center}
