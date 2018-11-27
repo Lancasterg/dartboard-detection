@@ -25,33 +25,10 @@ void task_four(char *imageName);
 int main(int argc, char **argv) {
 
     char *imageName = argv[1];
-//    task_1bb();
 
+//     test_detector();
 
-//    task_four(imageName);
-//    task_three(imageName);
-     test_detector();
-
-
-//    CascadeClassifier model;
-//0
-//    if (!model.load(cascade_name)) {
-//        printf("--(!)Error loading\n");
-//        return 1;
-//    };
-//
-//    vector<Mat> images = load_test_images();
-//    vector<vector<Rect>> true_labels = load_face_labels();
-//
-//    double f1 = calculate_total_f1(images, true_labels, model);
-    //label_faces();
-    //label_darts();
-    //task_one_a();
-//    task_one_b();
-    //task_two();
-    //task_one_b();
-//    task_two_b();
-//    task_three(imageName);
+    task_three(imageName);
     return 0;
 }
 
@@ -106,36 +83,6 @@ void test_detector(){
         f1_scores.emplace_back(calculate_f1(tpr.at(i),rects.at(i).size(),true_labels.at(i).size()));
     }
 }
-
-void task_four(char *imageName){
-    Mat image = imread(imageName);
-    Mat img = imread(imageName);
-    CascadeClassifier model;
-    // 1. Load the Strong Classifier in a structure called `model'
-    if (!model.load(cascade_dart_name)) {
-        printf("--(!)Error loading\n");
-        return;
-    };
-    if (image.empty()) {
-        cout << "can not open " << imageName << endl;
-        return;
-    }
-    vector<Rect> detected_dartboards = sliding_window_classification(image, model);
-
-    // Draw and show the detected rects
-    for (const Rect &circ: detected_dartboards) {
-        rectangle(img, circ, Scalar(0, 255, 0), 2);
-    }
-    img.convertTo(img, CV_32F);
-    display("output", img);
-
-
-
-
-}
-
-
-
 
 
 void task_three(char *imageName) {
@@ -342,8 +289,9 @@ void task_two_b() {
 
     // calculate f1 score for each
     for (int i = 0; i < 16; i++) {
+        printf("darts%d\t", i);
         f1_scores.emplace_back(calculate_f1(tpr.at(i), rects.at(i).size(), true_labels.at(i).size()));
-        cout << "f1_score: " << f1_scores.at(i) << endl;
+//        cout << "f1_score: " << f1_scores.at(i) << endl;
     }
 
     for (int i = 0; i < 16; i++) {

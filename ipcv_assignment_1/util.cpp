@@ -8,41 +8,6 @@
 
 using namespace cv::xfeatures2d;
 
-vector<Rect> sliding_window_classification(Mat &src, CascadeClassifier model) {
-    int min_window = 40;
-    int max_window = src.rows;
-    vector<Rect> ret;
-    vector<Rect> detections;
-//    for (int window_size = min_window; window_size < max_window; window_size++){
-//
-//        for (int i = 0; i < src.rows - window_size; i+= 0.5 * window_size){
-//            for (int j = 0; j < src.cols - window_size; j+= 0.5 * window_size){
-//
-//                vector<Rect> cur_det;
-//                Mat dst_roi;
-//                src(Rect(j,i,window_size, window_size)).copyTo(dst_roi);
-//                model.detectMultiScale(dst_roi, cur_det, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(min_window, min_window), Size(window_size, window_size));
-//
-//                if (cur_det.size() != 0) { // if a detection has been made
-//                    Rect rect(cur_det[0].x + src.rows, cur_det[0].y + src.cols, cur_det[0].width, cur_det[0].height);
-//                    detections.emplace_back(rect);
-//                }
-//            }
-//        }
-//    }
-
-//
-//
-//    model.detectMultiScale(src, detections, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(cur_window, cur_window), Size(cur_wind, 250));
-//
-//    for (Rect r: detections){
-//        rectangle( src, r, Scalar(255,0,0), 2, 8, 0 );
-//    }
-//    imshow("dst_roi", src);
-//    waitKey(0);
-
-    return ret;
-}
 
 vector<Vec2f> getCentral(Mat sub, vector<Vec2f> lines) {
     float diag = sqrt(pow(sub.rows, 2) + pow(sub.cols, 2));
@@ -256,6 +221,7 @@ vector<Rect> concentric_intersection(const Mat &image) {
     return det_circles;
 }
 
+
 vector<Rect> template_matching(const Mat &src, vector<Rect> targets) {
     vector<Rect> result;
     // load templates
@@ -403,8 +369,8 @@ vector<Rect> filter_SURF(Mat im_scene, vector<Rect> det_boards) {
     printf("Good points: %d\n",(int) good_points.size());
 
 
-    imshow("Good Matches & Object detection", img_matches);
-    waitKey(0);
+//    imshow("Good Matches & Object detection", img_matches);
+//    waitKey(0);
 
 
     int del = 0;

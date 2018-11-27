@@ -5,6 +5,11 @@
 #include "header/hough.h"
 #include "header/util.h"
 
+/**
+ * Filiter out duplicate / intersecting boards
+ * @param boards
+ * @return
+ */
 vector<Rect> exlude_intersect(vector<Rect> boards) {
     vector<Rect> result;
     vector<Rect> toExclude;
@@ -75,7 +80,6 @@ vector<Rect> detect_dartboards(Mat image, CascadeClassifier model) {
 
                 // add the rects together
 
-
                 Rect rect(avg_x - 10 + r.x, avg_y + r.y - 10, avg_width + 10, avg_height + 10);
                 det_boards.emplace_back(rect);
             }
@@ -93,8 +97,10 @@ vector<Rect> detect_dartboards(Mat image, CascadeClassifier model) {
 
     det_boards = exlude_intersect(det_boards);
 
+    // filter using SURF
     det_boards = filter_SURF(image, det_boards);
 
+    // filter using template matching
     det_boards = template_matching(image, det_boards);
 
     return det_boards;
@@ -209,6 +215,7 @@ int calculate_tpr(vector<Rect> ground_truth, vector<Rect> detections, Mat image)
  */
 double calculate_f1(int true_positives, int total_detections, int true_detections) {
     double false_positives = total_detections - true_positives;
+    printf("false positives: %f \t", false_positives);
     double precision = true_positives / (true_positives + false_positives);
     double false_negatives = true_detections - true_positives;
     double recall = true_positives / (true_positives + false_negatives);
