@@ -192,6 +192,7 @@ vector<Vec2f> hough_line(const Mat &src, float threshold, int delta) {
         }
     }
 
+
 //    display("hough_space", hough_space);
     vector<Vec2f> lines;
     for (int rho = 0; rho < diag; rho++) {
