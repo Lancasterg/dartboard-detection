@@ -250,11 +250,17 @@ The solution at this level gives very good results, achieving a true positive ra
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=0.6\linewidth]{images/flowdiagram.png}
+\includegraphics[width=1\linewidth]{images/flowdiagram.png}
 \caption{Flow diagram of image detection algorithm. }
 \label{default}
 \end{center}
 \end{figure}
+Reasons  for building the classifier in this way include: 
+\begin{itemize}
+\item Although the Viola-Jones classifier can filter out background information, applying the hough transform first allows it to focus on areas of interest; 
+\item Each area is checked by the linear hough transform to ensure that there is a dartboard present. A large number of intersecting lines indicates truth. 
+\end{itemize}
+
 \begin{figure}[htb]
 \centering
 \begin{subfigure}{.5\linewidth}
@@ -319,15 +325,10 @@ The solution at this level gives very good results, achieving a true positive ra
   \label{fig:sub2}
 \end{subfigure}
 \caption{Best and worst cases for the dartboard detector. Column a shows the best case \emph{dart8}, which has a F1 score of 1.  Column b shows the worst case \emph{dart14}, which has an F1 score of 0.67}
-
 \end{figure}
-Reasons  for building the classifier in this way include: 
-\begin{itemize}
-\item Although the Viola-Jones classifier can filter out background information, applying the hough transform first allows it to focus on areas of interest; 
-\item Each area is checked by the linear hough transform to ensure that there is a dartboard present. A large number of intersecting lines indicates truth. 
-\end{itemize}
 
 
+\newpage
 Merits of the classifier include: 
 \begin{itemize}
 	\item It has a perfect recall value for all images;
