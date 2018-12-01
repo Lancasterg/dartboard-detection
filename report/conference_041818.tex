@@ -10,6 +10,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{multirow}
+\usepackage{url}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
@@ -33,7 +34,7 @@ mu18336@bristol.ac.uk}
 \maketitle
 
 \begin{abstract}
-This report outlines the tasks completed for Image Processing and Computer Vision assignment one. Our final classifier, which uses template matching and speeded up robust features (SURF), has acheived an F1 score of 1 when tested against the sixteen test images. 
+This report outlines the tasks completed for Image Processing and Computer Vision assignment one. Our final classifier, which uses template matching and speeded up robust features (SURF), has achieved an F1 score of 1 when tested against the sixteen test images. 
 \end{abstract}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -41,7 +42,7 @@ This report outlines the tasks completed for Image Processing and Computer Visio
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The Viola-Jones Object Detector}
 \vspace{-0.15cm}
-Sixteen test images were annotated for ground truth. Each test image contains either faces, dartboards or a combination of both. In this first task, the Viola-Jones object detector has been used to find faces within the test images. 
+Sixteen test images were annotated for ground truth. Each test image contains either faces, dartboards or a combination of both. In this first task, the Viola-Jones object detector has been used to find faces within the test images \cite{viola2001rapid}. 
 \begin{figure}[htb]
 \centering
 \begin{subfigure}{.5\linewidth}
@@ -216,7 +217,6 @@ Additionally, the face detector has been trained on a much larger data set than 
 \section{Integration with Shape Detectors}
 Both linear and circular hough transforms have been used in conjunction with the Viola-Jones classifier to improve the precision and recall of the system. 
 \par
-
 \begin{table}[htp]
 \caption{F1 scores, precision and recall for all images, when detecting for dartboards using the Viola-Jones classifier combined with shape detection techniques. }
 \begin{center}
@@ -255,10 +255,13 @@ The solution at this level gives very good results, achieving a true positive ra
 \label{default}
 \end{center}
 \end{figure}
+\par
+The circular hough transform has been used to detect areas of interest for the Viola-Jones classifier. For any group of intersecting detected circles, the centre of mass is found by plotting all detections on a blank image and using the OpenCV  function \emph{findContours} \cite{suzuki1985topological}. This algorithm scans the image, it is interrupted when an edge has been detected. In this case, an edge is any non-zero value. Through following the border of the first detected edge, an outline of a shape can be mapped and added to a list of detected features.
+\par 
 Reasons  for building the classifier in this way include: 
 \begin{itemize}
 \item Although the Viola-Jones classifier can filter out background information, applying the hough transform first allows it to focus on areas of interest; 
-\item Each area is checked by the linear hough transform to ensure that there is a dartboard present. A large number of intersecting lines indicates truth. 
+\item Each area is checked by the linear hough transform to ensure that there is a dartboard present. Twenty-five intersecting lines indicates truth. 
 \end{itemize}
 
 \begin{figure}[htb]
@@ -328,7 +331,6 @@ Reasons  for building the classifier in this way include:
 \end{figure}
 
 
-\newpage
 Merits of the classifier include: 
 \begin{itemize}
 	\item It has a perfect recall value for all images;
@@ -351,13 +353,13 @@ And the shortcomings include:
 As the dartboard detector from part three has perfect precision, improvement can only be made to the recall. Two filters, using SURF and template matching have been used as final layers in the dartboard detector to reduce the number of false positives, and achieve a perfect F1 score for the test data set. 
 \par
 \subsection{Speeded up robust features (SURF)}
-SURF aims to map the relationship between a descriptor and detector to find similarities in images. The SURF algorithm splits object detection into three stages: interest point detection, local neighbourhood description and matching. Interest point detection performs blob detection to detect characteristic regions in the object image. Local neighbourhood description uses the points of interest to define the features of the image. By comparing descriptors from two images, matching pairs of points of interest can be found. 
+SURF aims to map the relationship between a descriptor and detector to find similarities in images \cite{bay2006surf}. The SURF algorithm splits object detection into three stages: interest point detection, local neighbourhood description and matching. Interest point detection performs blob detection to detect characteristic regions in the object image. Local neighbourhood description uses the points of interest to define the features of the image. By comparing descriptors from two images, matching pairs of points of interest can be found \cite{surf_site}. 
 \par
 
 \begin{figure}[!htb]
 \begin{center}
-\includegraphics[width=0.8\linewidth]{images/SURF.png}
-\caption{SURF, applied to the test data set. }
+\includegraphics[width=0.6\linewidth]{images/SURF.png}
+\caption{SURF, applied to \emph{dart9}. Because there are not enough points of interest on the t-shirt, the feature is excluded from the number of detections. }
 \label{default}
 \end{center}
 \end{figure}
@@ -367,14 +369,14 @@ By applying SURF as a filter, only areas with more than two significant points o
 
 
 \subsection{Template Matching}
-Template matching is used to  match parts of an image to a template. The dartboard used from part two only has 3 layers, therefore it lacks the later layers that remove falsely detected features. By having more layers, the false positive rate can be reduced. \par
+Template matching is used to  match parts of an image to a template. The dartboard used from part two only has 3 layers, therefore it lacks the later layers that remove falsely detected features. By having more layers, the false positive rate can be reduced \cite{lewis1995fast}. \par
 
-Through experimentation, a template has been found that optimally rejects false positives, whilst keeping the true positives.  
+Through experimentation, a template has been found that rejects false positives, whilst keeping the true positives.  
 \par 
 \begin{figure}[!htb]
 \begin{center}
-\includegraphics[width=1\linewidth]{images/template.png}
-\caption{The Template used in the Template Matching Extension. }
+\includegraphics[width=0.8\linewidth]{images/template.png}
+\caption{The template used in the template matching extension. }
 \label{default}
 \end{center}
 \end{figure}
@@ -382,15 +384,15 @@ Through experimentation, a template has been found that optimally rejects false 
 \par 
 \begin{figure}[!htb]
 \begin{center}
-\includegraphics[width=1\linewidth]{images/template_merit.jpg}
-\caption{Template Matching Rejects the Two Remaining False Positives from \emph{dart15}.}
+\includegraphics[width=0.8\linewidth]{images/template_merit.jpg}
+\caption{Template matching rejects the two remaining false positives from \emph{dart15}.}
 \label{default}
 \end{center}
 \end{figure}
 The key to successful template matching is to choose a template with enough features to reject false areas. However, it shouldn't contain all the features of a dartboard because there may be shelters, irregular shapes or light in the test images that prevent them from getting high enough scores. Therefore, many different templates should be tried before a suitable one can be used.
-\newpage
+
 \subsection{Results}
-Applying the SURF filter removes two false positives. One from dart9, and one from dart14. This leaves one false positive in dart14, which is removed by template matching.
+Applying the SURF filter removes two false positives. One from dart9, and one from dart14. This leaves one false positive in dart14, which is removed by template matching. 
 \par
 We have decided to exclude a dartboard from \emph{dart8} and \emph{dart11} due to too much noise in the image. 
 \begin{table}[!htp]
@@ -398,28 +400,17 @@ We have decided to exclude a dartboard from \emph{dart8} and \emph{dart11} due t
 \begin{center}
 \begin{tabular}{||c|c|c|c||}
 \hline
-Image Name		 	& F1 Score 	& Precision	& Recall            \\ \hline
-dart0					& 1.00		&	1.00		& 1.00		\\
-dart1					& 1.00		&	1.00		& 1.00		\\
-dart2					& 1.00		&	1.00		& 1.00		\\
-dart3					& 1.00		&	1.00		& 1.00		\\
-dart4					& 1.00		&	1.00		& 1.00		\\
-dart5					& 1.00		&	1.00		& 1.00		\\
-dart6					& 1.00		&	1.00		& 1.00		\\
-dart7					& 1.00		&	1.00		& 1.00		\\
-dart8					& 1.00		&	1.00		& 1.00		\\
-dart9					& 1.00		&	1.00		& 1.00		\\
-dart10				& 1.00		&	1.00		& 1.00		\\
-dart11				& 1.00		&	1.00		& 1.00		\\
-dart12				& 1.00		&	1.00		& 1.00		\\
-dart13				& 1.00		&	1.00		& 1.00		\\
-dart14				& 1.00		&	1.00		& 1.00		\\
-dart15				& 1.00		&	1.00		& 1.00		\\ \hline
-Average 		 		& 1.00		&	1.00		& 1.00 		\\ \hline
+Classifier task		 	& F1 Score 	& Precision	& Recall            \\ \hline
+task 2				& 0.28		&	0.29		& 1.00		\\
+task 3				& 0.96		&	0.94		& 1.00		\\
+task 4				& 1.00		&	1.00		& 1.00		\\\hline
+
 \end{tabular}
 \end{center}
 \label{default}
 \end{table}
+\bibliography{citations}
+\bibliographystyle{unsrt}
 
 
 \end{document}

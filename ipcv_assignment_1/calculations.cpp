@@ -7,8 +7,8 @@
 
 /**
  * Filiter out duplicate / intersecting boards
- * @param boards
- * @return
+ * @param boards: vector of duplicate rects
+ * @return result: filtered dartboards
  */
 vector<Rect> exlude_intersect(vector<Rect> boards) {
     vector<Rect> result;
@@ -47,6 +47,20 @@ vector<Rect> exlude_intersect(vector<Rect> boards) {
     return result;
 }
 
+/**
+ * Main dartboard detection algorithm
+ *
+ * stage 1: Detect circles using hough circle transform
+ * stage 2: For all circles, detect using the viola-jones detector
+ * stage 3: Filter rects by line intersection
+ * stage 4: Exclude rects with no intersecting lines
+ * stage 5: Filter dartboards using SURF
+ * stage 6: Filter dartboards using template matching
+ *
+ * @param image: input image
+ * @param model: Viola-Jones classifier
+ * @return det_boards: detected dartboards
+ */
 vector<Rect> detect_dartboards(Mat image, CascadeClassifier model) {
     vector<Rect> ret;
     vector<Rect> circles = concentric_intersection(image);
@@ -141,17 +155,17 @@ double calculate_total_f1(vector<Mat> images, vector<vector<Rect>> ground_truth,
     return f1;
 }
 
-/**
+/** Calculate the amount of overlap between two rects
  *
  * @param a: Rect
  * @param b: Rect
  * @return
  */
-int overlap(Rect a, Rect b) {
-    if ((a.x + a.width) <= b.x || a.x >= (b.x + b.width) || a.y >= (b.y + b.height) || (a.y + a.height) <= b.y) {
-        return 0;
+int overlap(Rect rect_a, Rect rect_b) {
+    if ((rect_a.x + rect_a.width) <= rect_b.x || rect_a.x >= (rect_b.x + rect_b.width) || rect_a.y >= (rect_b.y + rect_b.height) || (rect_a.y + rect_a.height) <= rect_b.y) {
+        return false;
     }
-    return 1;
+    return true;
 }
 
 
