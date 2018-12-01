@@ -8,7 +8,12 @@
 
 using namespace cv::xfeatures2d;
 
-
+/** Find the center of intersecting lines
+ *
+ * @param sub
+ * @param lines
+ * @return
+ */
 vector<Vec2f> getCentral(Mat sub, vector<Vec2f> lines) {
     float diag = sqrt(pow(sub.rows, 2) + pow(sub.cols, 2));
 
@@ -41,6 +46,12 @@ vector<Vec2f> getCentral(Mat sub, vector<Vec2f> lines) {
     return centralLines;
 }
 
+/**
+ *  Find degree difference between lines.
+ *
+ * @param lines: vector of detected lines
+ * @return
+ */
 bool diverseDegree(vector<Vec2f> lines) {
     float totalDifference = 0;
     int n = 0;
@@ -62,6 +73,12 @@ bool diverseDegree(vector<Vec2f> lines) {
     return avg > 8;
 }
 
+/** Find points of intersecting lines
+ *
+ * @param src
+ * @param circles
+ * @return
+ */
 vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
     vector<Rect> result;
 
@@ -181,14 +198,26 @@ vector<Rect> line_intersection(const Mat &src, vector<Rect> &circles) {
     return result;
 }
 
+/**
+ * Find the center of concentric circles
+ *
+ * Works by plotting area of all detected circles on a blank image,
+ * then by finding the center of mass
+ *
+ * The function findContours uses an algorithm first described in a 1985 paper.
+ * It detects regions by following borders.
+ * @param image
+ * @return
+ */
 vector<Rect> concentric_intersection(const Mat &image) {
     vector<Vec3f> circles = hough_circle(image, 12, 40, 80);
-
     vector<Rect> det_circles;
     vector<vector<Point> > contours;
     vector<Vec4i> hierarchy;
+    // Create blank image
     Mat blank = cv::Mat::zeros(cv::Size(image.cols, image.rows), CV_8UC1);
 
+    // draw all detected circles on the blank image
     for (Vec3f c : circles) {
         Point center(c.val[1], c.val[0]);
         circle(blank, center, c.val[2], Scalar(255, 0, 0), -1);
@@ -221,7 +250,12 @@ vector<Rect> concentric_intersection(const Mat &image) {
     return det_circles;
 }
 
-
+/** Perform template matching as a filter
+ *
+ * @param src
+ * @param targets
+ * @return
+ */
 vector<Rect> template_matching(const Mat &src, vector<Rect> targets) {
     vector<Rect> result;
     // load templates
@@ -335,13 +369,13 @@ vector<Rect> filter_SURF(Mat im_scene, vector<Rect> det_boards) {
     surf->detectAndCompute(im_object, noArray(), keypoints_object, descriptors_object);
     surf->detectAndCompute(im_scene, noArray(), keypoints_scene, descriptors_scene);
 
-    //-- Step 3: Matching descriptor vectors using FLANN matcher
+    // Matching descriptor vectors using FLANN matcher
     FlannBasedMatcher matcher; // FLANN - Fast Library for Approximate Nearest Neighbors
     vector<vector<DMatch> > matches;
     matcher.knnMatch(descriptors_object, descriptors_scene, matches, 2); // find the best 2 matches of each descriptor
 
 
-    //-- Step 4: Select only good matches
+    // Select only good matches
     std::vector<DMatch> good_matches;
     for (int k = 0; k < std::min(descriptors_scene.rows - 1, (int) matches.size()); k++) {
         if ((matches[k][0].distance < 0.95 * (matches[k][1].distance)) &&
@@ -352,7 +386,7 @@ vector<Rect> filter_SURF(Mat im_scene, vector<Rect> det_boards) {
         }
     }
 
-    //-- Step 5: Draw lines between the good matching points
+    // Draw lines between the good matching points
     Mat img_matches;
     drawMatches(im_object, keypoints_object, im_scene, keypoints_scene,
                 good_matches, img_matches, Scalar::all(-1), Scalar::all(-1),
