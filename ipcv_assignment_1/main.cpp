@@ -25,9 +25,7 @@ void task_four(char *imageName);
 int main(int argc, char **argv) {
 
     char *imageName = argv[1];
-
 //     test_detector();
-
     task_three(imageName);
     return 0;
 }
@@ -110,6 +108,7 @@ void task_three(char *imageName) {
     }
     img.convertTo(img, CV_32F);
     display("output", img);
+    imwrite("detected.jpg", img);
 }
 
 

@@ -12,6 +12,10 @@
 using namespace std;
 using namespace cv;
 
+/**
+ * Create a vertical sobel kernel
+ * @return
+ */
 Mat getYKernel() {
     Mat kernel(Size(3, 3), CV_32F);
     kernel.at<float>(0, 0) = -1;
@@ -26,6 +30,10 @@ Mat getYKernel() {
     return kernel;
 }
 
+/**
+ * Create horizontal sobel kernel
+ * @return
+ */
 Mat getXKernel() {
     Mat kernel(Size(3, 3), CV_32F);
     kernel.at<float>(0, 0) = -1;
@@ -40,6 +48,13 @@ Mat getXKernel() {
     return kernel;
 }
 
+/**
+ * Allocate 3D array for circle hough transform
+ * @param x
+ * @param y
+ * @param z
+ * @return the_array
+ */
 int ***allocate3DArray(int x, int y, int z) {
     int ***the_array = new int **[x];
     for (int i(0); i < x; ++i) {
@@ -56,6 +71,12 @@ int ***allocate3DArray(int x, int y, int z) {
     return the_array;
 }
 
+/**
+ * Allocate 2D array for hough line transform
+ * @param x
+ * @param y
+ * @return
+ */
 int **allocate2DArray(int x, int y) {
     int **the_array = new int *[x];
     for (int i(0); i < x; ++i) {
@@ -68,6 +89,11 @@ int **allocate2DArray(int x, int y) {
     return the_array;
 }
 
+/**
+ * Normalise, and then display an image
+ * @param name
+ * @param src
+ */
 void display(const string &name, const Mat &src) {
     cv::Mat dst = src.clone();
     normalize(dst, dst, 0, 1, NORM_MINMAX);
@@ -76,6 +102,24 @@ void display(const string &name, const Mat &src) {
     dst.release();
 }
 
+/**
+ * Circle hough transform
+ *
+ * 1. Blur the image and apply sobel filter
+ * 2. Get gradient direction
+ * 3. Loop through all pixels
+ * If pixel is above threshold
+ *      3a. loop through all values of Radius
+ *      3b. calculate hough space value using the gradient direction
+ *      3c. Increment matrix at position
+ * 4. Create hough space by flattening the 3rd dimension
+ * 5. Add detected circles to list of vec3f [x,y,r]
+ * @param src
+ * @param threshold
+ * @param minRadius
+ * @param maxRadius
+ * @return
+ */
 vector<Vec3f> hough_circle(const Mat &src, int threshold, int minRadius, int maxRadius) {
     Mat gray_image;
     cvtColor(src, gray_image, CV_BGR2GRAY);
@@ -150,6 +194,22 @@ vector<Vec3f> hough_circle(const Mat &src, int threshold, int minRadius, int max
     return circles;
 }
 
+/**
+ * Hough line transform
+ *
+ * 1. Blur the image and apply sobel filter
+ * 2. Get gradient direction
+ * 3. Loop through all pixels
+ * If pixel value is above threshold
+ *      3a. detect line using gradient direction
+ *      3b. if value fits in accumulator matrix
+ *      3c. increment matrix at position [rho, degrees]
+ * 4. All lines above threshold are kept
+ * @param src
+ * @param threshold
+ * @param delta
+ * @return
+ */
 vector<Vec2f> hough_line(const Mat &src, float threshold, int delta) {
     Mat gray_image;
     cvtColor(src, gray_image, CV_BGR2GRAY);
@@ -177,11 +237,11 @@ vector<Vec2f> hough_line(const Mat &src, float threshold, int delta) {
         for (int j = 0; j < magn.cols; j++) {
             float mag = magn.at<float>(i, j);
             float ori = dir.at<float>(i, j);
-            int oriDegree = (int) (ori * 180 / M_PI);
+            int oriDegree = (int) (ori * 180 / M_PI);   // convert radians to degrees
 
             if (abs(mag - 255) < 1e-4) {
                 for (int thetaDegree = oriDegree - delta; thetaDegree < oriDegree + delta; thetaDegree++) {
-                    float theta = thetaDegree * (float) M_PI / 180;
+                    float theta = thetaDegree * (float) M_PI / 180; // converts degrees to radians
                     int rho = (int) (i * sin(theta) + j * cos(theta));
                     if (rho >= 0 && rho < diag && thetaDegree >= 0 && thetaDegree <= 360) {
                         votes[rho][thetaDegree] += 1;
@@ -192,7 +252,6 @@ vector<Vec2f> hough_line(const Mat &src, float threshold, int delta) {
         }
     }
 
-
 //    display("hough_space", hough_space);
     vector<Vec2f> lines;
     for (int rho = 0; rho < diag; rho++) {
@@ -200,16 +259,6 @@ vector<Vec2f> hough_line(const Mat &src, float threshold, int delta) {
             if (votes[rho][thetaDegree] > threshold) {
                 double theta = thetaDegree * M_PI / 180;
                 lines.insert(lines.end(), Vec2f(rho, (float) theta));
-
-//                Point pt1, pt2;
-//                double a = cos(theta), b = sin(theta);
-//                double x0 = a * rho, y0 = b * rho;
-//                pt1.x = cvRound(x0 + 1000 * (-b));
-//                pt1.y = cvRound(y0 + 1000 * (a));
-//                pt2.x = cvRound(x0 - 1000 * (-b));
-//                pt2.y = cvRound(y0 - 1000 * (a));
-//                line(src, pt1, pt2, Scalar(0, 0, 255), 1, CV_AA);
-//                printf("%d %d %d\n", rho, thetaDegree, hough_space.at<int>(rho, thetaDegree));
             }
         }
     }
@@ -220,6 +269,11 @@ vector<Vec2f> hough_line(const Mat &src, float threshold, int delta) {
     return lines;
 }
 
+/**
+ * Colnvolute through image and apply X and Y sobel kernel, then take sqrt
+ * @param input
+ * @return
+ */
 Mat gradMagnitude(Mat input) {
     Mat gradXKernel = getXKernel();
     Mat gradYKernel = getYKernel();
@@ -256,6 +310,14 @@ Mat gradMagnitude(Mat input) {
     return result;
 }
 
+/**
+ * Calculate gradient direction
+ *
+ * Convolute through image and apply both X and Y sobel, then take atan
+ *
+ * @param input
+ * @return
+ */
 Mat gradDirection(Mat input) {
     Mat gradXKernel = getXKernel();
     Mat gradYKernel = getYKernel();
@@ -299,6 +361,12 @@ Mat gradDirection(Mat input) {
     return result;
 }
 
+/**
+ * Apply binary threshold to image
+ *
+ * @param image
+ * @param threshold
+ */
 void thresholdMag(Mat &image, int threshold) {
     for (int i = 0; i < image.rows; i++) {
         for (int j = 0; j < image.cols; j++) {

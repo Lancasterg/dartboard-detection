@@ -1,0 +1,34 @@
+\begin{thebibliography}{1}
+
+\bibitem{viola2001rapid}
+Paul Viola and Michael Jones.
+\newblock Rapid object detection using a boosted cascade of simple features.
+\newblock In {\em Computer Vision and Pattern Recognition, 2001. CVPR 2001.
+  Proceedings of the 2001 IEEE Computer Society Conference on}, volume~1, pages
+  I--I. IEEE, 2001.
+
+\bibitem{suzuki1985topological}
+Satoshi Suzuki et~al.
+\newblock Topological structural analysis of digitized binary images by border
+  following.
+\newblock {\em Computer vision, graphics, and image processing}, 30(1):32--46,
+  1985.
+
+\bibitem{bay2006surf}
+Herbert Bay, Tinne Tuytelaars, and Luc Van~Gool.
+\newblock Surf: Speeded up robust features.
+\newblock In {\em European conference on computer vision}, pages 404--417.
+  Springer, 2006.
+
+\bibitem{surf_site}
+{Object Detection using SURF}.
+\newblock
+  \url{http://answers.opencv.org/question/16548/object-detection-using-surf/}.
+\newblock Accessed: 2018-11-20.
+
+\bibitem{lewis1995fast}
+John~P Lewis.
+\newblock Fast template matching.
+\newblock In {\em Vision interface}, volume~95, pages 15--19, 1995.
+
+\end{thebibliography}
